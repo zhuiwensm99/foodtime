@@ -2899,7 +2899,7 @@ function handleQuickShortcut(shortcut) {
 /* 调起相机/相册，读取为 base64 后作为用户消息发送到小食助手 */
 function triggerCameraCapture() {
   if (!window.isSecureContext) {
-    toast("相机需要 HTTPS 安全环境，请通过 https 地址打开页面后再拍照");
+    toast("调用相机需要 HTTPS 安全环境，请通过安全地址打开页面");
     return;
   }
   const input = document.createElement("input");
@@ -2913,16 +2913,16 @@ function triggerCameraCapture() {
     document.body.removeChild(input);
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      toast("请选择照片文件");
+      toast("请选择图片文件");
       return;
     }
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       const base64 = String(reader.result || "");
-      if (!base64) { toast("读取照片失败，请重新选择"); return; }
+      if (!base64) { toast("读取图片失败，请重试"); return; }
       sendFoodPhotoToAgent(file, base64).catch((error) => toast(agentSendErrorMessage(error)));
     }, { once: true });
-    reader.addEventListener("error", () => toast("读取照片失败，请重新选择"), { once: true });
+    reader.addEventListener("error", () => toast("读取图片失败，请重试"), { once: true });
     reader.readAsDataURL(file);
   });
   input.click();
@@ -3019,16 +3019,7 @@ function resizeAgentTextarea(textarea) {
 }
 
 function agentSendErrorMessage(error) {
-  const msg = String(error?.message || "");
-  const code = String(error?.code || "").toLowerCase();
-  if (msg.includes("Connection error.")) return "无法连接 DeepSeek 模型，请检查网络或模型配置";
-  if (code === "ai_not_configured" || msg.includes("DeepSeek API 未绑定")) return "DeepSeek API 未绑定，请先在“账号 - Agent 设置”中填写 API Key";
-  if (code === "ai_connection_error" || msg.includes("无法连接 DeepSeek")) return "无法连接 DeepSeek 模型，请检查网络或模型配置";
-  // 兜底：把后端 OpenAI SDK 的英文凭证错误翻译成中文
-  const lower = msg.toLowerCase();
-  if (lower.includes("missing credentials") || lower.includes("api key") || lower.includes("apikey") || lower.includes("openai_admin_key") || lower.includes("openai_api_key")) {
-    return "DeepSeek API 未绑定，请先在“账号 - Agent 设置”中填写 API Key";
-  }
+  if (error?.message === "Connection error.") return "无法连接家庭 Agent 模型，请检查用户页面里的模型配置";
   return error?.message || "发送给助手失败，请稍后重试";
 }
 
@@ -3064,11 +3055,11 @@ function updateVoiceButtonAvailability(form) {
   button.disabled = supportsTextFallback ? processing : (keepEnabled ? (processing || formUnavailable) : voiceUnavailable);
   if (modeToggle) modeToggle.disabled = voiceUnavailable;
   const voiceHint = !asrAvailable
-    ? "语音输入尚未配置"
+    ? "系统语音识别尚未配置"
     : state.voiceConfigured !== true && browserSpeech
       ? "使用浏览器语音识别，按住说话，松开发送"
       : formUnavailable || !state.agentConfigured
-        ? "小食助手当前不可用"
+        ? "助手当前不可用"
         : "按住说话，松开发送";
   button.title = supportsTextFallback && voiceUnavailable ? `${voiceHint}；轻点打开文字对话` : voiceHint;
 }
@@ -3128,11 +3119,11 @@ function microphoneErrorMessage(error) {
   if (error?.name === "NotAllowedError" || error?.name === "SecurityError") {
     return window.isSecureContext
       ? "未获得麦克风权限，请在浏览器设置中允许访问"
-      : "麦克风需要 HTTPS，请通过 https 地址打开页面";
+      : "麦克风需要 HTTPS，请通过安全地址打开页面";
   }
-  if (error?.name === "NotFoundError") return "未检测到麦克风，请检查设备是否连接";
+  if (error?.name === "NotFoundError") return "没有找到可用的麦克风";
   if (error?.name === "NotReadableError") return "麦克风正被其他应用占用";
-  return error?.message || "无法启动录音，请检查麦克风后重试";
+  return error?.message || "无法启动录音，请重试";
 }
 
 function getBrowserSpeechRecognition() {

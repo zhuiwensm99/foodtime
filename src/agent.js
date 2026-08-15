@@ -61,76 +61,48 @@ function toolDisplayName(name) {
   return labels[name] || "处理物品";
 }
 
-function normalizeAiError(error) {
-  const msg = String(error?.message || "");
-  const type = String(error?.type || "").toLowerCase();
-  const code = String(error?.code || "").toLowerCase();
-  if (type.includes("auth") || code.includes("api_key") || code.includes("auth") || msg.includes("credentials") || msg.includes("api key") || msg.includes("apikey") || msg.includes("openai_admin_key") || msg.includes("openai_api_key")) {
-    const friendly = new Error("DeepSeek API 未绑定或密钥无效，请先在“账号 - Agent 设置”中填写个人 API Key");
-    friendly.statusCode = 503;
-    friendly.code = "AI_NOT_CONFIGURED";
-    return friendly;
-  }
-  if (msg.includes("connection error") || type.includes("connection") || code.includes("connection") || msg.includes("timeout") || code.includes("timeout")) {
-    const friendly = new Error("无法连接 DeepSeek 模型，请检查网络或 Base URL 配置");
-    friendly.statusCode = 503;
-    friendly.code = "AI_CONNECTION_ERROR";
-    return friendly;
-  }
-  return error;
-}
-
 async function streamedChatCompletion(ai, request, emit) {
-  let completion;
-  try {
-    completion = await ai.chat.completions.create({ ...request, stream: true });
-  } catch (error) {
-    throw normalizeAiError(error);
-  }
-  try {
-    const toolCalls = [];
-    let text = "";
-    let reasoning = "";
-    const parser = createThinkStreamParser((type, delta) => {
-      if (!delta) return;
-      if (type === "reasoning") {
-        reasoning += delta;
-        emit({ type: "reasoning_delta", delta });
-        return;
-      }
-      text += delta;
-      emit({ type: "text_delta", delta });
-    });
-
-    for await (const chunk of completion) {
-      const delta = chunk.choices?.[0]?.delta;
-      if (!delta) continue;
-      const reasoningDelta = typeof delta.reasoning_content === "string"
-        ? delta.reasoning_content
-        : typeof delta.reasoning === "string" ? delta.reasoning : "";
-      if (reasoningDelta) {
-        reasoning += reasoningDelta;
-        emit({ type: "reasoning_delta", delta: reasoningDelta });
-      }
-      if (typeof delta.content === "string") parser.write(delta.content);
-      for (const partial of delta.tool_calls || []) {
-        const index = Number.isInteger(partial.index) ? partial.index : 0;
-        toolCalls[index] ||= { id: "", type: "function", function: { name: "", arguments: "" } };
-        if (partial.id) toolCalls[index].id += partial.id;
-        if (partial.type) toolCalls[index].type = partial.type;
-        if (partial.function?.name) toolCalls[index].function.name += partial.function.name;
-        if (partial.function?.arguments) toolCalls[index].function.arguments += partial.function.arguments;
-      }
+  const completion = await ai.chat.completions.create({ ...request, stream: true });
+  const toolCalls = [];
+  let text = "";
+  let reasoning = "";
+  const parser = createThinkStreamParser((type, delta) => {
+    if (!delta) return;
+    if (type === "reasoning") {
+      reasoning += delta;
+      emit({ type: "reasoning_delta", delta });
+      return;
     }
-    parser.end();
+    text += delta;
+    emit({ type: "text_delta", delta });
+  });
 
-    const message = { role: "assistant", content: text || null };
-    const completedCalls = toolCalls.filter(Boolean);
-    if (completedCalls.length) message.tool_calls = completedCalls;
-    return { message, reasoning };
-  } catch (error) {
-    throw normalizeAiError(error);
+  for await (const chunk of completion) {
+    const delta = chunk.choices?.[0]?.delta;
+    if (!delta) continue;
+    const reasoningDelta = typeof delta.reasoning_content === "string"
+      ? delta.reasoning_content
+      : typeof delta.reasoning === "string" ? delta.reasoning : "";
+    if (reasoningDelta) {
+      reasoning += reasoningDelta;
+      emit({ type: "reasoning_delta", delta: reasoningDelta });
+    }
+    if (typeof delta.content === "string") parser.write(delta.content);
+    for (const partial of delta.tool_calls || []) {
+      const index = Number.isInteger(partial.index) ? partial.index : 0;
+      toolCalls[index] ||= { id: "", type: "function", function: { name: "", arguments: "" } };
+      if (partial.id) toolCalls[index].id += partial.id;
+      if (partial.type) toolCalls[index].type = partial.type;
+      if (partial.function?.name) toolCalls[index].function.name += partial.function.name;
+      if (partial.function?.arguments) toolCalls[index].function.arguments += partial.function.arguments;
+    }
   }
+  parser.end();
+
+  const message = { role: "assistant", content: text || null };
+  const completedCalls = toolCalls.filter(Boolean);
+  if (completedCalls.length) message.tool_calls = completedCalls;
+  return { message, reasoning };
 }
 
 function publicConversation(row) {
@@ -371,18 +343,13 @@ function createAgentService({ db, foodService, timezone = "Asia/Shanghai", resol
     const messages = [{ role: "system", content: instructions() }, ...history];
     const events = [];
     for (let round = 0; round < 6; round += 1) {
-      let response;
-      try {
-        response = await ai.chat.completions.create({
-          model: activeModel,
-          messages,
-          tools: toolDefinitions.map((tool) => ({ type: "function", function: tool })),
-          tool_choice: "auto",
-          parallel_tool_calls: false
-        });
-      } catch (error) {
-        throw normalizeAiError(error);
-      }
+      const response = await ai.chat.completions.create({
+        model: activeModel,
+        messages,
+        tools: toolDefinitions.map((tool) => ({ type: "function", function: tool })),
+        tool_choice: "auto",
+        parallel_tool_calls: false
+      });
       const choice = response.choices[0]?.message;
       if (!choice) throw new Error("model returned no message");
       messages.push(choice);
