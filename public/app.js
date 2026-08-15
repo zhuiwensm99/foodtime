@@ -1005,22 +1005,24 @@ function renderMetrics() {
   const freshCard = freshEl?.parentElement;
   const freshSub = freshCard?.querySelector("small");
   if (freshSub) freshSub.textContent = freshPct ? `${freshPct}% · 3 天以上` : "3 天以上";
-  // 本月支出（demo 台账最后一个月）
+  // 本月支出：基于真实食材创建月份统计，新用户无数据时显示 --
+  const ledger = getLedgerFromFoods();
   const monthSpend = $("#monthSpend");
   if (monthSpend) {
-    const last = demo.ledger[demo.ledger.length - 1];
+    const last = ledger.months[ledger.months.length - 1];
     monthSpend.textContent = last ? `¥${last.buy.toLocaleString("zh-CN")}` : "¥0";
   }
   const spendTrend = $("#spendTrend");
   if (spendTrend) {
-    const last = demo.ledger[demo.ledger.length - 1];
-    const prev = demo.ledger[demo.ledger.length - 2];
-    if (last && prev) {
-      const delta = prev.buy ? Math.round(((last.buy - prev.buy) / prev.buy) * 100) : 0;
+    const last = ledger.months[ledger.months.length - 1];
+    const prev = ledger.months[ledger.months.length - 2];
+    if (last && prev && prev.buy > 0) {
+      const delta = Math.round(((last.buy - prev.buy) / prev.buy) * 100);
       spendTrend.textContent = delta <= 0 ? `↓${Math.abs(delta)}%` : `↑${delta}%`;
       spendTrend.className = delta <= 0 ? "trend-down" : "trend-up";
     } else {
       spendTrend.textContent = "--";
+      spendTrend.className = "trend-down";
     }
   }
 }
@@ -1028,6 +1030,10 @@ function renderMetrics() {
 function renderOverviewRecipes() {
   const grid = $("#overviewRecipes");
   if (!grid) return;
+  if (!state.foods.length) {
+    grid.innerHTML = `<div class="recipe-empty muted">添加食材后，小食会在这里推荐适合本周的菜谱</div>`;
+    return;
+  }
   const recipes = demo.recipesBase.slice(0, 3);
   grid.innerHTML = recipes.map((r) => `
     <article class="card recipe card-hover" style="grid-column:span 4" role="button" tabindex="0" data-recipe="${escapeHtml(r.t)}">
@@ -2893,7 +2899,7 @@ function handleQuickShortcut(shortcut) {
 /* 调起相机/相册，读取为 base64 后作为用户消息发送到小食助手 */
 function triggerCameraCapture() {
   if (!window.isSecureContext) {
-    toast("调用相机需要 HTTPS 安全环境，请通过安全地址打开页面");
+    toast("相机需要 HTTPS 安全环境，请通过 https 地址打开页面后再拍照");
     return;
   }
   const input = document.createElement("input");
@@ -2907,16 +2913,16 @@ function triggerCameraCapture() {
     document.body.removeChild(input);
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      toast("请选择图片文件");
+      toast("请选择照片文件");
       return;
     }
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       const base64 = String(reader.result || "");
-      if (!base64) { toast("读取图片失败，请重试"); return; }
+      if (!base64) { toast("读取照片失败，请重新选择"); return; }
       sendFoodPhotoToAgent(file, base64).catch((error) => toast(agentSendErrorMessage(error)));
     }, { once: true });
-    reader.addEventListener("error", () => toast("读取图片失败，请重试"), { once: true });
+    reader.addEventListener("error", () => toast("读取照片失败，请重新选择"), { once: true });
     reader.readAsDataURL(file);
   });
   input.click();
@@ -3013,7 +3019,16 @@ function resizeAgentTextarea(textarea) {
 }
 
 function agentSendErrorMessage(error) {
-  if (error?.message === "Connection error.") return "无法连接家庭 Agent 模型，请检查用户页面里的模型配置";
+  const msg = String(error?.message || "");
+  const code = String(error?.code || "").toLowerCase();
+  if (msg.includes("Connection error.")) return "无法连接 DeepSeek 模型，请检查网络或模型配置";
+  if (code === "ai_not_configured" || msg.includes("DeepSeek API 未绑定")) return "DeepSeek API 未绑定，请先在“账号 - Agent 设置”中填写 API Key";
+  if (code === "ai_connection_error" || msg.includes("无法连接 DeepSeek")) return "无法连接 DeepSeek 模型，请检查网络或模型配置";
+  // 兜底：把后端 OpenAI SDK 的英文凭证错误翻译成中文
+  const lower = msg.toLowerCase();
+  if (lower.includes("missing credentials") || lower.includes("api key") || lower.includes("apikey") || lower.includes("openai_admin_key") || lower.includes("openai_api_key")) {
+    return "DeepSeek API 未绑定，请先在“账号 - Agent 设置”中填写 API Key";
+  }
   return error?.message || "发送给助手失败，请稍后重试";
 }
 
@@ -3049,11 +3064,11 @@ function updateVoiceButtonAvailability(form) {
   button.disabled = supportsTextFallback ? processing : (keepEnabled ? (processing || formUnavailable) : voiceUnavailable);
   if (modeToggle) modeToggle.disabled = voiceUnavailable;
   const voiceHint = !asrAvailable
-    ? "系统语音识别尚未配置"
+    ? "语音输入尚未配置"
     : state.voiceConfigured !== true && browserSpeech
       ? "使用浏览器语音识别，按住说话，松开发送"
       : formUnavailable || !state.agentConfigured
-        ? "助手当前不可用"
+        ? "小食助手当前不可用"
         : "按住说话，松开发送";
   button.title = supportsTextFallback && voiceUnavailable ? `${voiceHint}；轻点打开文字对话` : voiceHint;
 }
@@ -3113,11 +3128,11 @@ function microphoneErrorMessage(error) {
   if (error?.name === "NotAllowedError" || error?.name === "SecurityError") {
     return window.isSecureContext
       ? "未获得麦克风权限，请在浏览器设置中允许访问"
-      : "麦克风需要 HTTPS，请通过安全地址打开页面";
+      : "麦克风需要 HTTPS，请通过 https 地址打开页面";
   }
-  if (error?.name === "NotFoundError") return "没有找到可用的麦克风";
+  if (error?.name === "NotFoundError") return "未检测到麦克风，请检查设备是否连接";
   if (error?.name === "NotReadableError") return "麦克风正被其他应用占用";
-  return error?.message || "无法启动录音，请重试";
+  return error?.message || "无法启动录音，请检查麦克风后重试";
 }
 
 function getBrowserSpeechRecognition() {
@@ -3651,17 +3666,120 @@ setupVoiceInput($("#quickAgentForm"), {
 /* =========================================================
    食光家庭版 · 新增页面渲染（台账 / 菜谱 / 预警 / 个人中心）
    ========================================================= */
+/* 从当前家庭食材数据推导真实台账（后端暂无独立消费/浪费接口）
+   新用户无食材时返回 hasData=false，避免展示演示旧数据 */
+function getLedgerFromFoods() {
+  const foods = state.foods || [];
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const months = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(currentYear, currentMonth - i, 1);
+    const label = `${d.getMonth() + 1} 月`;
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    months.push({ key, label, buy: 0, waste: 0 });
+  }
+  const currentKey = months[months.length - 1].key;
+
+  const purchaseTxns = [];
+  const wasteTxns = [];
+  const savingsMap = new Map();
+  let currentBuy = 0;
+  let currentWaste = 0;
+  let currentHandled = 0;
+
+  foods.forEach((food) => {
+    const price = Number(food.unitPrice) || 0;
+
+    // 采购时间：按创建月份统计（未填价格则不计入金额，但仍可被记录）
+    const created = food.createdAt ? new Date(food.createdAt) : null;
+    const createdKey = created
+      ? `${created.getFullYear()}-${String(created.getMonth() + 1).padStart(2, "0")}`
+      : null;
+    const createdLabel = created ? `${created.getMonth() + 1} 月` : null;
+    if (createdKey) {
+      const bucket = months.find((m) => m.key === createdKey);
+      if (bucket) bucket.buy += price;
+      if (createdKey === currentKey) currentBuy += price;
+      purchaseTxns.push({
+        d: `${String(created.getMonth() + 1).padStart(2, "0")}-${String(created.getDate()).padStart(2, "0")}`,
+        n: food.name,
+        q: food.quantityText || "",
+        amount: price
+      });
+    }
+
+    // 浪费：已过期未处理 / 或已标记为丢弃
+    const isWasted = food.status === "expired" || food.handledAction === "discard";
+    if (isWasted && price) {
+      const wasteDate = food.expiresOn ? new Date(food.expiresOn) : created || now;
+      const wasteKey = `${wasteDate.getFullYear()}-${String(wasteDate.getMonth() + 1).padStart(2, "0")}`;
+      const bucket = months.find((m) => m.key === wasteKey);
+      if (bucket) bucket.waste += price;
+      if (wasteKey === currentKey) currentWaste += price;
+      wasteTxns.push({
+        d: `${String(wasteDate.getMonth() + 1).padStart(2, "0")}-${String(wasteDate.getDate()).padStart(2, "0")}`,
+        n: food.name,
+        amount: price,
+        reason: food.status === "expired" ? "过期未处理" : "已丢弃"
+      });
+    }
+
+    // 已处理（吃掉/烹饪）算作本月减少浪费的价值
+    if (food.handled && food.handledAction !== "discard" && price) {
+      const handleDate = food.handledAt ? new Date(food.handledAt) : created || now;
+      const handleKey = `${handleDate.getFullYear()}-${String(handleDate.getMonth() + 1).padStart(2, "0")}`;
+      if (handleKey === currentKey) currentHandled += price;
+      if (!savingsMap.has(handleKey)) savingsMap.set(handleKey, { m: `${handleDate.getMonth() + 1} 月`, amount: 0 });
+      savingsMap.get(handleKey).amount += price;
+    }
+  });
+
+  purchaseTxns.sort((a, b) => b.d.localeCompare(a.d));
+  wasteTxns.sort((a, b) => b.d.localeCompare(a.d));
+  const savingsTxns = Array.from(savingsMap.values()).sort((a, b) => b.m.localeCompare(a.m));
+
+  return {
+    hasData: foods.length > 0,
+    months,
+    currentBuy,
+    currentWaste,
+    currentHandled,
+    purchaseTxns,
+    wasteTxns,
+    savingsTxns
+  };
+}
+
 function renderLedger() {
-  const data = demo.ledger;
-  const last = data.at(-1);
-  const prev = data.length >= 2 ? data.at(-2) : null;
-  const totalSave = demo.ledgerTxns.savings.reduce((sum, item) => sum + item.amount, 0);
+  const ledger = getLedgerFromFoods();
+  const ledgerSummary = $("#ledgerSummary");
+  const ledgerChart = $("#ledgerChart");
+
+  if (!ledger.hasData) {
+    if (ledgerSummary) {
+      ledgerSummary.innerHTML = `
+        <div class="card ledger-empty-state" style="grid-column:1/-1">
+          <svg class="ic ic-32" style="color:var(--muted)"><use href="#i-cart"/></svg>
+          <strong>暂无台账数据</strong>
+          <span>添加食材并记录价格后，这里会自动统计采购、浪费与节省金额。</span>
+        </div>`;
+    }
+    if (ledgerChart) ledgerChart.innerHTML = "";
+    return;
+  }
+
+  const data = ledger.months;
+  const last = data[data.length - 1];
+  const prev = data[data.length - 2];
+  const totalSave = ledger.savingsTxns.reduce((sum, item) => sum + item.amount, 0);
   const diffBuy = prev ? prev.buy - last.buy : 0;
-  const saveDelta = prev
+  const saveDelta = prev && prev.buy > 0
     ? (diffBuy >= 0 ? `较上月省下 ¥${Math.abs(diffBuy).toFixed(0)}（-${Math.round((diffBuy / prev.buy) * 100)}%）` : `较上月多花 ¥${Math.abs(diffBuy).toFixed(0)}（+${Math.round((-diffBuy / prev.buy) * 100)}%）`)
     : "暂无上月对比数据";
-  const wasteRate = ((last.waste / last.buy) * 100).toFixed(1);
-  const ledgerSummary = $("#ledgerSummary");
+  const wasteRate = last.buy > 0 ? ((last.waste / last.buy) * 100).toFixed(1) : "0.0";
+
   if (ledgerSummary) ledgerSummary.innerHTML = `
     <div class="card kpi card-hover ledger-kpi-clickable" style="grid-column:span 4" data-ledger-jump="purchase">
       <div class="kpi-top">
@@ -3675,16 +3793,15 @@ function renderLedger() {
         <div class="kpi-ico" style="background:var(--red-100);color:var(--expired)"><svg class="ic ic-20"><use href="#i-trash"/></svg></div>
         <span class="kpi-trend" style="background:var(--red-100);color:#B32A30">待改进</span>
       </div>
-      <div><div class="kpi-n num" style="color:var(--expired)">¥${last.waste.toFixed(0).toLocaleString("zh-CN")}</div><div class="kpi-l">本月浪费</div><div class="kpi-sub">浪费率 ${wasteRate}%，低于同小区平均 11%</div></div>
+      <div><div class="kpi-n num" style="color:var(--expired)">¥${last.waste.toFixed(0).toLocaleString("zh-CN")}</div><div class="kpi-l">本月浪费</div><div class="kpi-sub">浪费率 ${wasteRate}%</div></div>
     </div>
     <div class="card kpi card-hover ledger-kpi-clickable" style="grid-column:span 4" data-ledger-jump="savings">
       <div class="kpi-top">
         <div class="kpi-ico" style="background:var(--amber-100);color:var(--expiring)"><svg class="ic ic-20"><use href="#i-leaf"/></svg></div>
-        <span class="kpi-trend">自 2026 年 2 月</span>
+        <span class="kpi-trend">本月</span>
       </div>
-      <div><div class="kpi-n num" style="color:var(--expiring)">¥${totalSave.toFixed(0).toLocaleString("zh-CN")}</div><div class="kpi-l">累计减少浪费</div><div class="kpi-sub">使用食光以来</div></div>
+      <div><div class="kpi-n num" style="color:var(--expiring)">¥${ledger.currentHandled.toFixed(0).toLocaleString("zh-CN")}</div><div class="kpi-l">已处理价值</div><div class="kpi-sub">吃掉/烹饪的食材价值</div></div>
     </div>`;
-  // 绑定 KPI 卡片点击跳转对应内页
   document.querySelectorAll("#ledgerSummary .ledger-kpi-clickable").forEach((card) => {
     card.addEventListener("click", () => {
       const jump = card.dataset.ledgerJump;
@@ -3694,32 +3811,47 @@ function renderLedger() {
       renderLedgerList();
     });
   });
-  const maxBuy = Math.max(...data.map((d) => d.buy));
-  const ledgerChart = $("#ledgerChart");
-  if (ledgerChart) ledgerChart.innerHTML = data.map((d) => {
-    return `<div class="chart-col"><div class="chart-bars">
-      <span class="chart-bar-wrap"><span class="chart-bar-tip">采购 ¥${d.buy.toLocaleString("zh-CN")}</span><span class="chart-bar" style="background:var(--fresh);height:${(d.buy / maxBuy * 100).toFixed(0)}%"></span></span>
-      <span class="chart-bar-wrap"><span class="chart-bar-tip">浪费 ¥${d.waste.toLocaleString("zh-CN")}</span><span class="chart-bar" style="background:var(--red);height:${(d.waste / maxBuy * 100).toFixed(0)}%"></span></span>
-    </div><span class="muted small">${escapeHtml(d.m)}</span></div>`;
-  }).join("");
+
+  const maxBuy = Math.max(...data.map((d) => d.buy), 1);
+  if (ledgerChart) {
+    ledgerChart.innerHTML = data.map((d) => {
+      return `<div class="chart-col"><div class="chart-bars">
+        <span class="chart-bar-wrap"><span class="chart-bar-tip">采购 ¥${d.buy.toLocaleString("zh-CN")}</span><span class="chart-bar" style="background:var(--fresh);height:${(d.buy / maxBuy * 100).toFixed(0)}%"></span></span>
+        <span class="chart-bar-wrap"><span class="chart-bar-tip">浪费 ¥${d.waste.toLocaleString("zh-CN")}</span><span class="chart-bar" style="background:var(--red);height:${(d.waste / maxBuy * 100).toFixed(0)}%"></span></span>
+      </div><span class="muted small">${escapeHtml(d.label)}</span></div>`;
+    }).join("");
+  }
 }
 
 function renderLedgerList() {
   const tab = state.ledgerTab;
   const body = $("#ledgerList");
   if (!body) return;
+  const ledger = getLedgerFromFoods();
+
+  if (!ledger.hasData) {
+    body.innerHTML = `<div class="ledger-empty-state"><svg class="ic ic-28" style="color:var(--muted)"><use href="#i-cart"/></svg><strong>暂无明细</strong><span>添加食材并记录价格后，会自动生成采购、浪费与节省明细。</span></div>`;
+    document.querySelectorAll("#ledgerListTabs .ledger-list-tab").forEach((button) => {
+      button.classList.toggle("active", button.dataset.ledgerTab === tab);
+    });
+    return;
+  }
+
   if (tab === "purchase") {
-    body.innerHTML = `<table class="table"><thead><tr><th>日期</th><th>类型</th><th>物品</th><th class="num">金额</th><th>说明</th></tr></thead><tbody>
-      ${demo.ledgerTxns.purchase.map((t) => `<tr><td class="num">${t.d}</td><td><span class="pill pill-fresh">采购</span></td><td><b>${escapeHtml(t.n)}</b></td><td class="num">¥${t.amount.toFixed(2)}</td><td>${escapeHtml(t.q)}</td></tr>`).join("")}
-    </tbody></table>`;
+    const rows = ledger.purchaseTxns.length
+      ? ledger.purchaseTxns.map((t) => `<tr><td class="num">${t.d}</td><td><span class="pill pill-fresh">采购</span></td><td><b>${escapeHtml(t.n)}</b></td><td class="num">¥${t.amount.toFixed(2)}</td><td>${escapeHtml(t.q)}</td></tr>`).join("")
+      : `<tr><td colspan="5" class="ledger-empty-row">本月还没有采购记录</td></tr>`;
+    body.innerHTML = `<table class="table"><thead><tr><th>日期</th><th>类型</th><th>物品</th><th class="num">金额</th><th>说明</th></tr></thead><tbody>${rows}</tbody></table>`;
   } else if (tab === "waste") {
-    body.innerHTML = `<table class="table"><thead><tr><th>日期</th><th>类型</th><th>物品</th><th class="num">金额</th><th>原因</th></tr></thead><tbody>
-      ${demo.ledgerTxns.waste.map((t) => `<tr><td class="num">${t.d}</td><td><span class="pill pill-expired">浪费</span></td><td><b>${escapeHtml(t.n)}</b></td><td class="num" style="color:var(--expired)">¥${t.amount.toFixed(2)}</td><td>${escapeHtml(t.reason)}</td></tr>`).join("")}
-    </tbody></table>`;
+    const rows = ledger.wasteTxns.length
+      ? ledger.wasteTxns.map((t) => `<tr><td class="num">${t.d}</td><td><span class="pill pill-expired">浪费</span></td><td><b>${escapeHtml(t.n)}</b></td><td class="num" style="color:var(--expired)">¥${t.amount.toFixed(2)}</td><td>${escapeHtml(t.reason)}</td></tr>`).join("")
+      : `<tr><td colspan="5" class="ledger-empty-row">本月还没有浪费记录</td></tr>`;
+    body.innerHTML = `<table class="table"><thead><tr><th>日期</th><th>类型</th><th>物品</th><th class="num">金额</th><th>原因</th></tr></thead><tbody>${rows}</tbody></table>`;
   } else {
-    body.innerHTML = `<table class="table"><thead><tr><th>月份</th><th class="num">节省金额</th></tr></thead><tbody>
-      ${demo.ledgerTxns.savings.map((t) => `<tr><td><b>${escapeHtml(t.m)}</b></td><td class="num" style="color:var(--fresh)">¥${t.amount.toFixed(0)}</td></tr>`).join("")}
-    </tbody></table>`;
+    const rows = ledger.savingsTxns.length
+      ? ledger.savingsTxns.map((t) => `<tr><td><b>${escapeHtml(t.m)}</b></td><td class="num" style="color:var(--fresh)">¥${t.amount.toFixed(0)}</td></tr>`).join("")
+      : `<tr><td colspan="2" class="ledger-empty-row">暂无节省记录</td></tr>`;
+    body.innerHTML = `<table class="table"><thead><tr><th>月份</th><th class="num">已处理价值</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
   document.querySelectorAll("#ledgerListTabs .ledger-list-tab").forEach((button) => {
     button.classList.toggle("active", button.dataset.ledgerTab === tab);
@@ -3727,7 +3859,7 @@ function renderLedgerList() {
 }
 
 function menuCard(m) {
-  // 家庭 web 复刻：本周菜单小卡（span 3）
+  // 家庭 web 复刻：本周菜单小卡
   return `<article class="card recipe card-hover" style="grid-column:span 3" role="button" tabindex="0" data-recipe="${escapeHtml(m.n)}">
     <div class="recipe-img" style="background:${m.g}"><span class="tag">${escapeHtml(m.d || m.tag || "")}</span><svg class="ic ic-28"><use href="#i-book"/></svg></div>
     <div class="recipe-b"><b>${escapeHtml(m.n)}</b><span class="small muted-2">${escapeHtml(m.t || "")}</span>${m.c?.length ? `<div class="chips">${m.c.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join("")}</div>` : ""}</div>
@@ -3735,7 +3867,7 @@ function menuCard(m) {
 }
 
 function recipeCard(r) {
-  // 家庭 web 复刻：推荐/今日菜谱大卡（span 4）
+  // 家庭 web 复刻：推荐/今日菜谱大卡
   return `<article class="card recipe card-hover" style="grid-column:span 4" role="button" tabindex="0" data-recipe="${escapeHtml(r.t)}">
     <div class="recipe-img" style="background:${r.g}"><span class="tag">${escapeHtml(r.tag || "")}</span><svg class="ic ic-28"><use href="#i-book"/></svg></div>
     <div class="recipe-b"><b>${escapeHtml(r.t)}</b><span class="small muted-2">${escapeHtml(r.m)}</span>${r.c?.length ? `<div class="chips">${r.c.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join("")}</div>` : ""}</div>
@@ -3748,11 +3880,13 @@ function renderRecipes() {
     if (!el) return;
     el.innerHTML = html || `<div class="recipe-empty muted">${emptyText}</div>`;
   };
-  const today = demo.todayMenu.map(menuCard).join("");
-  const weekly = demo.weeklyMenu.map(menuCard).join("");
+  const hasFoods = state.foods.length > 0;
+  // 没有食材时不展示假数据；推荐菜谱库仍作为示例保留
+  const today = hasFoods ? demo.todayMenu.map(menuCard).join("") : "";
+  const weekly = hasFoods ? demo.weeklyMenu.map(menuCard).join("") : "";
   const base = demo.recipesBase.map(recipeCard).join("");
-  fillGrid("todayMenuGrid", today, "今日暂无推荐菜谱");
-  fillGrid("weeklyMenuGrid", weekly, "本周暂无菜单");
+  fillGrid("todayMenuGrid", today, hasFoods ? "今日暂无推荐菜谱" : "先添加食材，小食才能为你排今日菜单");
+  fillGrid("weeklyMenuGrid", weekly, hasFoods ? "本周暂无菜单" : "添加食材后，这里会生成本周菜单");
   fillGrid("recipeGrid", base, "还没有菜谱，点「AI 生成」让小食为你推荐");
   updateRecipeAdvice();
 }
