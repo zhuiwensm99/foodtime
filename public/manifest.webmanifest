@@ -1,14 +1,14 @@
 {
   "id": "/",
-  "name": "食光 FoodTime",
-  "short_name": "食光",
-  "description": "家庭食材有效期管理、菜谱推荐与 AI 助手",
+  "name": "鲜知贴",
+  "short_name": "鲜知贴",
+  "description": "家庭有效期物品、存放地点与墨水屏提醒工具",
   "lang": "zh-CN",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#f3f5f1",
-  "theme_color": "#0E9F6E",
+  "theme_color": "#196849",
   "icons": [
     {
       "src": "/icons/icon-192.png",
