@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#0E9F6E">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="鲜知贴">
+  <meta name="apple-mobile-web-app-title" content="食光">
   <title>食光 FoodTime</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="/styles.css?v=20260815-4">
-  <link rel="stylesheet" href="/styles-foodtime.css?v=20260815-4">
+  <link rel="stylesheet" href="/styles.css?v=20260815-5">
+  <link rel="stylesheet" href="/styles-foodtime.css?v=20260815-5">
 </head>
 <body class="t-family">
   <!-- ============ 食光 SVG 图标精灵 ============ -->
@@ -24,14 +24,35 @@
       <clipPath id="clipFace"><circle cx="60" cy="60" r="46"/></clipPath>
     </defs>
 
-    <symbol id="logo-foodtime" viewBox="0 0 40 40">
-      <rect x="1.5" y="1.5" width="37" height="37" rx="12.5" fill="url(#gFam)"/>
-      <rect x="1.5" y="1.5" width="37" height="37" rx="12.5" fill="none" stroke="rgba(255,255,255,.18)"/>
-      <path d="M11.4 15.2 20 8.6l8.6 6.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M13.4 19.6h13.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M13.6 23.6h12.8c0 4.1-2.9 6.9-6.4 6.9s-6.4-2.8-6.4-6.9Z" fill="#fff" opacity=".94"/>
-      <path d="M28.7 9.6c2.7-.6 4.5.4 5 3-2.7.6-4.5-.4-5-3Z" fill="#7BE0B4"/>
-      <circle cx="30.4" cy="27.8" r="3.1" fill="#F26B22"/>
+    <symbol id="logo-foodtime" viewBox="0 0 96 96">
+      <defs>
+        <linearGradient id="gTileFood" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#21B583"/>
+          <stop offset="1" stop-color="#0C6C4C"/>
+        </linearGradient>
+        <linearGradient id="gLeafFood" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#7DD8B4"/>
+          <stop offset="1" stop-color="#21B583"/>
+        </linearGradient>
+      </defs>
+      <rect x="4" y="4" width="88" height="88" rx="26" fill="url(#gTileFood)"/>
+      <rect x="4" y="4" width="88" height="88" rx="26" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+      <rect x="10" y="10" width="76" height="76" rx="20" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.2"/>
+      <g fill="none" stroke="#FFFFFF" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M28 34 Q48 24 68 34"/>
+        <path d="M36 38 L44 47"/>
+        <path d="M60 38 L52 47"/>
+        <path d="M34 53 H62"/>
+        <path d="M40 59 V72 H56 V59"/>
+        <path d="M40 65.5 H56"/>
+        <path d="M37 78 H44"/>
+        <path d="M52 78 H59"/>
+      </g>
+      <g fill="url(#gLeafFood)">
+        <path d="M72 16 c3.4-3.4 9-3.6 12.6-.6-1.6 4.8-6.6 8-11.6 7.2-.8-2.2-.6-4.6-1-6.6Z"/>
+        <path d="M73.5 20.4 c3.2-1 6.4-1.6 9.2-1.2" stroke="rgba(255,255,255,.75)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      </g>
+      <circle cx="84" cy="83" r="3.2" fill="rgba(255,255,255,.5)"/>
     </symbol>
 
     <symbol id="foodie" viewBox="0 0 96 96">
@@ -943,7 +964,7 @@
   <!-- ============ 底部内联脚本 ============ -->
   <script src="/vendor/markdown-it.js?v=20260815-4"></script>
   <script src="/markdown.js?v=20260815-4"></script>
-  <script src="/app.js?v=20260815-4"></script>
+  <script src="/app.js?v=20260815-5"></script>
   <script>
     // 内联 UI 助手：仅保留页面间跳转与登录/退出等最小化逻辑
     (function () {
