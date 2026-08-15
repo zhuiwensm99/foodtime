@@ -1031,7 +1031,7 @@ function renderOverviewRecipes() {
   const grid = $("#overviewRecipes");
   if (!grid) return;
   if (!state.foods.length) {
-    grid.innerHTML = `<div class="recipe-empty muted">添加食材后，小食会在这里推荐适合本周的菜谱</div>`;
+    grid.innerHTML = `<div class="recipe-empty muted" style="grid-column:1/-1">添加食材后，小食会在这里推荐适合本周的菜谱</div>`;
     return;
   }
   const recipes = demo.recipesBase.slice(0, 3);
@@ -3878,7 +3878,7 @@ function renderRecipes() {
   const fillGrid = (id, html, emptyText) => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.innerHTML = html || `<div class="recipe-empty muted">${emptyText}</div>`;
+    el.innerHTML = html || `<div class="recipe-empty muted" style="grid-column:1/-1">${emptyText}</div>`;
   };
   const hasFoods = state.foods.length > 0;
   // 没有食材时不展示假数据；推荐菜谱库仍作为示例保留
@@ -3959,8 +3959,8 @@ function renderAlerts() {
   const alertEmptyEl = $("#alertEmpty");
   const alertIsEmpty = !visible.length;
   alertEmptyEl.classList.toggle("hidden", !alertIsEmpty);
-  const alertTitleEl = alertEmptyEl.querySelector("b");
-  const alertDescEl = alertEmptyEl.querySelector("div > span");
+  const alertTitleEl = alertEmptyEl.querySelector(".alert-empty-body b");
+  const alertDescEl = alertEmptyEl.querySelector(".alert-empty-body span");
   if (alertTitleEl) alertTitleEl.textContent = tab === "done" ? "暂无已处理预警" : "暂无待处理预警";
   if (alertDescEl) alertDescEl.textContent = tab === "done" ? "处理过的预警会出现在这里。" : "冰箱里的食材都在安全期内，继续保持～";
   $("#alertGroups").innerHTML = visible.length ? visible.map((g) => `

@@ -1861,6 +1861,10 @@ select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csv
 .view-head h2, .view-head h1 { font-size: 32px; line-height: 1.22; font-weight: 800; color: var(--ink-900); }
 .view-head .sub { color: var(--ink-500); font-size: 13.5px; margin-top: 6px; }
 .grid12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+.grid12 > .recipe-empty,
+.grid12 > .alert-empty,
+.grid12 > .ledger-empty-state,
+.grid12 > .empty { grid-column: 1 / -1; }
 .sec-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .sec-title h3 { font-size: 19px; font-weight: 720; color: var(--ink-900); }
 .link { background: none; border: 0; color: var(--brand-700); font-size: 12.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 0; }
@@ -2186,6 +2190,8 @@ select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csv
 .login-brand > * { position: relative; z-index: 1; }
 .login-brand .logo-cn, .login-brand .logo-en { color: #fff; }
 .login-brand .logo-en { color: rgba(255,255,255,.62); }
+.lb-logo { display: flex; align-items: center; }
+.logo-h { width: auto; height: 56px; display: block; }
 .lb-slogan { color: #fff; font-size: 46px; line-height: 1.14; font-weight: 800; letter-spacing: -.01em; margin: 0; }
 .lb-sub { font-size: 15px; line-height: 1.75; color: rgba(255,255,255,.78); max-width: 400px; }
 .lb-values { display: flex; flex-direction: column; gap: 16px; max-width: 420px; }
@@ -2207,6 +2213,7 @@ select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csv
 @media (max-width: 980px) {
   .login-layout { grid-template-columns: 1fr; }
   .login-brand { min-height: auto; padding: 40px 24px; }
+  .logo-h { height: 48px; }
   .login-form-wrap { padding: 32px 24px; }
   .grid12 > .card.kpi, .grid12 > .kpi { grid-column: span 6 !important; }
   .quick { grid-template-columns: repeat(2, 1fr); }
@@ -2241,6 +2248,10 @@ select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csv
   .grid12 { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
   .grid12 > .card.recipe,
   .grid12 > .card.kpi { grid-column: span 1 !important; }
+  .grid12 > .recipe-empty,
+  .grid12 > .alert-empty,
+  .grid12 > .ledger-empty-state,
+  .grid12 > .empty { grid-column: 1 / -1 !important; width: 100%; }
 }
 body.presentation-view-active #workspace { padding: 0; }
 body.presentation-view-active .quick-agent {

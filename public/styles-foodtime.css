@@ -341,9 +341,10 @@
 
 /* ===== 预警页 KPI / 工具条 / 空状态 ===== */
 .alert-toolbar { margin-bottom: 16px; }
-.alert-empty { display: flex; align-items: center; gap: 14px; padding: 44px 4px; color: #8a968f; }
+.alert-empty { display: flex; align-items: center; gap: 14px; padding: 44px 20px; color: #8a968f; }
+.alert-empty > div { flex: 1 1 auto; min-width: 0; }
 .alert-empty b { display: block; color: var(--ft-ink, #12211B); font-size: 15px; }
-.alert-empty span { font-size: 13px; }
+.alert-empty span { display: block; font-size: 13px; line-height: 1.55; }
 .alert-empty .copilot-av { flex: none; }
 
 /* ===== 偏好设置开关 ===== */
