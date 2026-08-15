@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0E9F6E">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="鲜知贴">
+  <title>食光 FoodTime</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/styles.css?v=20260815-3">
+  <link rel="stylesheet" href="/styles-foodtime.css?v=20260815-3">
+</head>
+<body class="t-family">
+  <!-- ============ 食光 SVG 图标精灵 ============ -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+      <linearGradient id="gFam" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E9F6E"/><stop offset="1" stop-color="#0C6C4C"/></linearGradient>
+      <radialGradient id="gAiGlow" cx="50%" cy="50%" r="50%"><stop offset="52%" stop-color="#0E9F6E" stop-opacity=".40"/><stop offset="100%" stop-color="#0C6C4C" stop-opacity="0"/></radialGradient>
+      <linearGradient id="gAiRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6FE3B0"/><stop offset="1" stop-color="#0E9F6E"/></radialGradient>
+      <clipPath id="clipFace"><circle cx="60" cy="60" r="46"/></clipPath>
+    </defs>
+
+    <symbol id="logo-foodtime" viewBox="0 0 40 40">
+      <rect x="1.5" y="1.5" width="37" height="37" rx="12.5" fill="url(#gFam)"/>
+      <rect x="1.5" y="1.5" width="37" height="37" rx="12.5" fill="none" stroke="rgba(255,255,255,.18)"/>
+      <path d="M11.4 15.2 20 8.6l8.6 6.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M13.4 19.6h13.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M13.6 23.6h12.8c0 4.1-2.9 6.9-6.4 6.9s-6.4-2.8-6.4-6.9Z" fill="#fff" opacity=".94"/>
+      <path d="M28.7 9.6c2.7-.6 4.5.4 5 3-2.7.6-4.5-.4-5-3Z" fill="#7BE0B4"/>
+      <circle cx="30.4" cy="27.8" r="3.1" fill="#F26B22"/>
+    </symbol>
+
+    <symbol id="foodie" viewBox="0 0 96 96">
+      <defs>
+        <linearGradient id="xiaochu-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#0E9F6E"/>
+          <stop offset="1" stop-color="#0A4A36"/>
+        </linearGradient>
+      </defs>
+      <circle cx="48" cy="56" r="31" fill="url(#xiaochu-grad)"/>
+      <path d="M27 34c-6.2 0-11-4.4-11-10.2 0-5.8 5.2-10.4 11.4-9.4C29.6 8.6 36.6 5.4 42.6 8.6c4-4.8 12-4.4 15.8 1.4 6-1.6 11.6 2.6 11.6 8.6 0 6-4.8 10.4-11 10.4H27Z" fill="#FFFFFF"/>
+      <rect x="25" y="31" width="46" height="9" rx="4.5" fill="#F1EEE4"/>
+      <circle cx="38" cy="57" r="6" fill="#FFFFFF"/><circle cx="58" cy="57" r="6" fill="#FFFFFF"/>
+      <circle cx="39.4" cy="58.4" r="2.6" fill="#0B2B20"/><circle cx="59.4" cy="58.4" r="2.6" fill="#0B2B20"/>
+      <path d="M40 71q8 7 16 0" fill="none" stroke="#FFFFFF" stroke-width="3.8" stroke-linecap="round"/>
+      <path d="M31 81c6 3.6 28 3.6 34 0" fill="none" stroke="#F26B22" stroke-width="6" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.6 12 3.2l9 7.4V20a1.2 1.2 0 0 1-1.2 1.2h-4.6v-6.1H8.8v6.1H4.2A1.2 1.2 0 0 1 3 20Z"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M3.2 7.4 12 3l8.8 4.4v9.2L12 21l-8.8-4.4Z"/><path d="M3.2 7.4 12 11.8l8.8-4.4M12 11.8V21"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.6 2.8 19.4h18.4Z"/><path d="M12 9.4v4.3M12 16.9h.01"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4.2 19.4V5.2A2 2 0 0 1 6.2 3.2H19.8v16.2H6.2a2 2 0 0 0-2 2Z"/><path d="M19.8 19.4H6.6"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M15.6 20.4v-1.6a3.8 3.8 0 0 0-3.8-3.8H6.4a3.8 3.8 0 0 0-3.8 3.8v1.6"/><circle cx="9.1" cy="7.4" r="3.6"/><path d="M21.4 20.4v-1.6a3.8 3.8 0 0 0-2.8-3.66M16 4a3.6 3.6 0 0 1 0 6.9"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20.2V10.4M9.3 20.2V4.6M14.7 20.2v-6.4M20 20.2V8"/><path d="M2.6 20.2h18.8"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8.6a6 6 0 1 0-12 0c0 6.6-2.6 8.1-2.6 8.1h17.2S18 15.2 18 8.6Z"/><path d="M13.7 20.2a2 2 0 0 1-3.4 0"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7.4"/><path d="M20.6 20.6 16 16"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m20 6.5-11 11-5-5"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9.5 18 6-6-6-6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7.2" r="4"/></symbol>
+    <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.1"/><path d="M19.2 14.6a1.6 1.6 0 0 0 .32 1.77l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-.97 1.46V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1.05-1.46 1.6 1.6 0 0 0-1.77.32l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.6 1.6 0 0 0 .32-1.77 1.6 1.6 0 0 0-1.46-.97H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.46-1.05 1.6 1.6 0 0 0-.32-1.77l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.6 1.6 0 0 0 1.77.32H9a1.6 1.6 0 0 0 .97-1.46V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 .97 1.46 1.6 1.6 0 0 0 1.77-.32l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.6 1.6 0 0 0-.32 1.77V9a1.6 1.6 0 0 0 1.46.97H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.46.97Z"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9.2 21H5.4A2 2 0 0 1 3.4 19V5a2 2 0 0 1 2-2h3.8"/><path d="m16.4 16.8 4.8-4.8-4.8-4.8M21.2 12H9.6"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11.2 20.4A6.8 6.8 0 0 1 10 6.5C15.4 5.4 16.9 4.9 18.8 2.6c1 1.9 1.9 4 1.9 7.6 0 5.2-4.6 10.2-9.5 10.2Z"/><path d="M3 21.4c0-2.9 1.8-5.1 4.9-5.7 2.3-.5 4.7-1.9 5.7-3"/></symbol>
+    <symbol id="i-fridge" viewBox="0 0 24 24"><rect x="5" y="2.6" width="14" height="18.8" rx="2.4"/><path d="M5 9.6h14M8.4 6v1.6M8.4 12.4v2.6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M12 6.9V12l3.4 2.1"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M20 12.4V20.6H4v-8.2"/><rect x="2.4" y="7.6" width="19.2" height="4.8" rx="1.2"/><path d="M12 20.6V7.6"/><path d="M12 7.6H8.1a2.75 2.75 0 1 1 0-5.5C11 2.1 12 7.6 12 7.6ZM12 7.6h3.9a2.75 2.75 0 1 0 0-5.5C13 2.1 12 7.6 12 7.6Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3.6 6.2h16.8M8.4 6.2V4.4a1.2 1.2 0 0 1 1.2-1.2h4.8a1.2 1.2 0 0 1 1.2 1.2v1.8"/><path d="M18.6 6.2 17.7 19.6a2 2 0 0 1-2 1.8H8.3a2 2 0 0 1-2-1.8L5.4 6.2"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="8.6" y="2.6" width="6.8" height="12.4" rx="3.4"/><path d="M19 11.6a7 7 0 0 1-14 0M12 18.6v2.8"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M5 16h14"/><path d="M4 11l3-4 4 3 5-5 3 6H4z"/><path d="M6 16v3a1 1 0 001 1h10a1 1 0 001-1v-3"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2 5.8 5.8 2-5.8 2-2 5.8-2-5.8-5.8-2 5.8-2Z"/><path d="M18.6 16.4 19.5 19l2.6.9-2.6.9-.9 2.6"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4.2"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.4" y="10.4" width="15.2" height="10.6" rx="2.2"/><path d="M8 10.4V7.6a4 4 0 0 1 8 0v2.8"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.4" y="2.4" width="11.2" height="19.2" rx="2.6"/><path d="M10.6 18.4h2.8"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.4" y="4.6" width="17.2" height="16.8" rx="2.2"/><path d="M3.4 9.6h17.2M8.2 2.6v4M15.8 2.6v4"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M16.6 3.4a2.12 2.12 0 0 1 3 3L8 18l-4.2 1.2L5 15Z"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9.6" cy="20" r="1.4"/><circle cx="18.4" cy="20" r="1.4"/><path d="M2.4 3h2.8l2.5 12.1a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21.6 7H6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 21.4s7.4-3.4 7.4-9.4V5.6L12 2.8 4.6 5.6V12c0 6 7.4 9.4 7.4 9.4Z"/><path d="m9.2 11.8 2 2 3.6-3.6"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M21.4 13.4h-5l-1.6 2.6H9.2l-1.6-2.6h-5"/><path d="M6 4.6h12l3.4 8.8v5a2 2 0 0 1-2 2H4.6a2 2 0 0 1-2-2v-5Z"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4.2"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2 5.8 5.8 2-5.8 2-2 5.8-2-5.8-5.8-2 5.8-2Z"/></symbol>
+  </svg>
+
+  <!-- ============ 顶栏（登录页时由 #loginPanel 状态控制隐藏） ============ -->
+  <header class="topbar hidden" id="appTopbar">
+    <div class="topbar-in">
+      <a class="brand logo" href="#home" aria-label="食光首页">
+        <svg class="logo-mark"><use href="#logo-foodtime"/></svg>
+        <div class="logo-txt"><span class="logo-cn">食光</span><span class="logo-en">FoodTime</span></div>
+      </a>
+      <nav id="mainNav" class="nav hidden" aria-label="主导航">
+        <button type="button" class="active" data-view-target="home" aria-current="page">
+          <svg class="ic ic-18 nav-icon"><use href="#i-home"/></svg>
+          <span>首页</span>
+        </button>
+        <button type="button" data-view-target="items">
+          <svg class="ic ic-18 nav-icon"><use href="#i-box"/></svg>
+          <span>库存</span>
+        </button>
+        <button type="button" data-view-target="ledger">
+          <svg class="ic ic-18 nav-icon"><use href="#i-chart"/></svg>
+          <span>台账</span>
+        </button>
+        <button type="button" data-view-target="recipes">
+          <svg class="ic ic-18 nav-icon"><use href="#i-book"/></svg>
+          <span>菜谱</span>
+        </button>
+        <button type="button" data-view-target="alerts">
+          <svg class="ic ic-18 nav-icon"><use href="#i-alert"/></svg>
+          <span>预警</span>
+        </button>
+      </nav>
+      <div id="sessionActions" class="session hidden">
+        <span id="accountName" class="sr-only-account"></span>
+        <button class="icon-btn" type="button" data-view-target="notifications" title="消息通知" aria-label="消息通知">
+          <svg class="ic ic-20"><use href="#i-bell"/></svg>
+          <span class="badge-dot num" id="notiBadge">3</span>
+        </button>
+        <button class="user-chip" id="userChip" type="button" aria-haspopup="true" aria-expanded="false">
+          <span class="avatar" id="userAvatar">食</span>
+          <span id="userName">我</span>
+          <svg class="ic ic-16"><use href="#i-chev"/></svg>
+        </button>
+        <button id="logout" type="button" class="sr-only-logout">退出</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 全局个人中心下拉（桌面端 + 移动端共用，避免被 topbar 隐藏影响） -->
+  <div class="menu hidden" id="userMenu">
+    <div class="menu-h">
+      <div class="row gap3">
+        <span class="avatar avatar-lg" id="menuAvatar">食</span>
+        <div>
+          <b id="menuName">我</b>
+          <div class="small muted-2" id="menuRole">家庭成员</div>
+        </div>
+      </div>
+    </div>
+    <button class="menu-i" type="button" data-view-target="account"><svg class="ic ic-18"><use href="#i-user"/></svg>账户管理</button>
+    <button class="menu-i" type="button" data-view-target="agent-settings"><svg class="ic ic-18"><use href="#i-spark"/></svg>Agent 设置</button>
+    <button class="menu-i" type="button" data-view-target="preferences"><svg class="ic ic-18"><use href="#i-cog"/></svg>偏好设置</button>
+    <button class="menu-i danger" type="button" id="logoutMenu"><svg class="ic ic-18"><use href="#i-logout"/></svg>退出登录</button>
+  </div>
+
+  <!-- ============ 移动端底部 Tab Bar ============ -->
+  <nav class="mobile-bottom-nav" id="mobileNav" aria-label="移动端导航">
+    <button type="button" class="active" data-view-target="home" aria-current="page">
+      <svg class="ic"><use href="#i-home"/></svg>
+      <span>首页</span>
+    </button>
+    <button type="button" data-view-target="items">
+      <svg class="ic"><use href="#i-box"/></svg>
+      <span>库存</span>
+    </button>
+    <button type="button" data-view-target="ledger">
+      <svg class="ic"><use href="#i-chart"/></svg>
+      <span>台账</span>
+    </button>
+    <button type="button" data-view-target="recipes">
+      <svg class="ic"><use href="#i-book"/></svg>
+      <span>菜谱</span>
+    </button>
+    <button type="button" data-view-target="alerts">
+      <svg class="ic"><use href="#i-alert"/></svg>
+      <span>预警</span>
+    </button>
+  </nav>
+
+  <main class="shell">
+    <!-- 面包屑导航（动态渲染） -->
+    <nav class="breadcrumb" id="appBreadcrumb" aria-label="面包屑导航"></nav>
+
+    <!-- ============ 登录面板（家庭 web 风：左品牌 + 右表单） ============ -->
+    <section id="loginPanel" class="login-layout">
+      <div class="login-brand">
+        <div class="lb-logo">
+          <svg class="logo-mark"><use href="#logo-foodtime"/></svg>
+          <div class="logo-txt"><span class="logo-cn">食光</span><span class="logo-en">FoodTime</span></div>
+        </div>
+        <div>
+          <h1 class="lb-slogan">食材的<br>时间管理</h1>
+          <p class="lb-sub">把冰箱里的每一份食材，都放回它该被吃掉的那一天。让家里少一点浪费，多一点好好吃饭的从容。</p>
+        </div>
+        <div class="lb-values">
+          <div class="lb-value">
+            <div class="lb-ico"><svg class="ic ic-20"><use href="#i-clock"/></svg></div>
+            <div><b>保质期自动倒数</b><span>录入一次，72 小时 / 24 小时 / 过期三级预警自动推送到手机与冰箱贴</span></div>
+          </div>
+          <div class="lb-value">
+            <div class="lb-ico"><svg class="ic ic-20"><use href="#i-book"/></svg></div>
+            <div><b>按临期食材出菜谱</b><span>小食会先看冰箱里剩什么，再决定今晚给全家做什么</span></div>
+          </div>
+          <div class="lb-value">
+            <div class="lb-ico"><svg class="ic ic-20"><use href="#i-users"/></svg></div>
+            <div><b>一家人共用一本账</b><span>谁买的、谁吃掉的、这个月花了多少，都在同一份台账里</span></div>
+          </div>
+        </div>
+        <div class="lb-tag"><svg class="ic ic-16"><use href="#i-shield"/></svg>家庭版 · 户主与家人共同管理一个家的冰箱</div>
+      </div>
+      <section class="login-form-wrap">
+        <h2 id="authTitle">欢迎回来</h2>
+        <p id="authHint" class="muted">登录家庭账户，继续管理家庭的食材台账。</p>
+        <form id="loginForm" class="form login-form">
+          <label class="login-field">账号或邮箱<input name="login" type="text" autocomplete="username" inputmode="email" placeholder="admin 或 family@foodtime.example" required></label>
+          <label class="login-field">密码<input name="password" type="password" autocomplete="current-password" placeholder="至少 6 位" required></label>
+          <div class="login-options">
+            <label class="login-remember"><input type="checkbox" id="loginRemember" checked><span>7 天内免登录</span></label>
+            <a class="link" href="#" id="forgotPassword">忘记密码</a>
+          </div>
+          <button class="primary" type="submit">登录家庭账户</button>
+          <p class="login-switch">还没有家庭账户？<a href="#" id="registerLink">注册</a></p>
+        </form>
+        <form id="registerForm" class="form login-form hidden">
+          <label class="login-field">邮箱<input name="email" type="email" autocomplete="email" placeholder="family@foodtime.example" required></label>
+          <label class="login-field">显示名<input name="displayName" maxlength="40" autocomplete="name" placeholder="例如：小鹿"></label>
+          <label class="login-field">密码<input name="password" type="password" autocomplete="new-password" minlength="6" placeholder="至少 6 位" required></label>
+          <label class="login-field">邀请码（可选）<input name="invitationCode" id="registerInvitationCode" type="text" maxlength="12" autocomplete="off" placeholder="收到邀请码可填写，加入已有家庭"></label>
+          <button class="primary" type="submit">创建家庭账户</button>
+          <p class="login-switch">已经有账户？<a href="#" id="backToLogin">返回登录</a></p>
+        </form>
+      </section>
+    </section>
+
+    <section id="workspace" class="hidden">
+      <!-- ===== 首页 ===== -->
+      <section class="view active" data-view-panel="home" aria-label="首页">
+        <div class="mobile-home-header">
+          <a class="mobile-brand" href="#home" aria-label="食光首页">
+            <svg class="logo-mark"><use href="#logo-foodtime"/></svg>
+            <div class="mobile-brand-txt"><span class="logo-cn">食光</span><span class="logo-en">FoodTime</span></div>
+          </a>
+          <div class="mobile-header-actions">
+            <button class="icon-btn mobile-noti-btn" type="button" data-view-target="notifications" title="消息通知" aria-label="消息通知">
+              <svg class="ic ic-20"><use href="#i-bell"/></svg>
+              <span class="badge-dot num" id="mobileNotiBadge">0</span>
+            </button>
+            <button class="user-chip" id="mobileUserChip" type="button" aria-haspopup="true" aria-expanded="false">
+              <span class="avatar" id="mobileUserAvatar">食</span>
+              <span id="mobileUserName">我</span>
+              <svg class="ic ic-16"><use href="#i-chev"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="bento overview-grid">
+          <article class="tile welcome">
+            <div class="welcome-head">
+              <p class="eyebrow">今日物品状态</p>
+              <button class="display-launch welcome-display-launch" type="button" data-view-target="display" data-start-display>全屏显示</button>
+            </div>
+            <h1>你好，<span id="welcomeUser">admin</span></h1>
+            <p id="todayText" class="muted"></p>
+            <div class="overview-agent-shortcuts" aria-label="助手快捷提问">
+              <button type="button" data-quick-agent-prompt="家里有哪些三天内到期的物品？" disabled><span>⌕</span>查询三天内到期</button>
+              <button type="button" data-quick-agent-prompt="根据冰箱现有食材，今天可以做什么菜？" disabled><span>⌁</span>今天吃什么</button>
+              <button type="button" data-quick-agent-prompt="家里有哪些已经过期的物品？" disabled><span>!</span>哪些已经过期</button>
+              <button type="button" data-quick-agent-prompt="根据到期时间，帮我安排这周优先处理哪些物品？" disabled><span>↗</span>这周先处理什么</button>
+              <button type="button" data-quick-agent-prompt="用冰箱里快到期的食材推荐一道菜，并告诉我简单做法。" disabled><span>⌁</span>推荐消耗菜谱</button>
+              <button type="button" data-quick-agent-prompt="我刚买了一些物品，帮我记录名称、地点和有效期。" disabled><span>＋</span>记录新物品</button>
+            </div>
+            <button class="link welcome-manual-add" type="button" data-view-target="items" data-new-food>手动添加物品</button>
+          </article>
+          <article class="tile stat total"><span>新鲜食材</span><strong id="freshCount">0</strong><small>3 天以上</small></article>
+          <article class="tile stat warning"><span>临期食材</span><strong id="expiringCount">0</strong><small>72 小时内</small></article>
+          <article class="tile stat danger"><span>已过期食材</span><strong id="expiredCount">0</strong><small>建议丢弃</small></article>
+          <article class="tile stat spend"><span>本月食材支出</span><strong id="monthSpend">¥0</strong><small>较上月 <em id="spendTrend">--</em></small></article>
+          <article class="tile urgent">
+            <div class="tile-head">
+              <div><p class="eyebrow">优先处理</p><h2>最近到期</h2></div>
+              <button class="link" type="button" data-view-target="items">管理全部</button>
+            </div>
+            <div id="overviewFoods" class="priority-list"></div>
+          </article>
+        </div>
+
+        <!-- 本周推荐菜谱 -->
+        <div class="sec-title" style="margin-top:26px"><h3>本周推荐菜谱</h3><button class="link" type="button" data-panel="recipes">查看全部 <svg class="ic ic-16"><use href="#i-chev"/></svg></button></div>
+        <div class="grid12" id="overviewRecipes" aria-live="polite"></div>
+
+        <!-- 家人动态 -->
+        <div class="sec-title" style="margin-top:26px"><h3>家人动态</h3><button class="link" type="button" data-panel="notifications">查看全部 <svg class="ic ic-16"><use href="#i-chev"/></svg></button></div>
+        <div id="overviewActivities" class="overview-activities" aria-live="polite"></div>
+      </section>
+
+      <!-- ===== 全屏展示（家庭 web 端 ambient 风格） ===== -->
+      <section class="view presentation-view" data-view-panel="display" aria-label="全屏展示">
+        <div class="ambient-display">
+          <header class="ambient-header">
+            <div class="ambient-brand">
+              <svg class="ambient-brand-mark"><use href="#logo-foodtime"/></svg>
+              <span><strong>食光</strong><small id="displayHouseholdName">家庭物品</small></span>
+            </div>
+            <div class="ambient-clock" aria-live="off">
+              <strong id="displayTime">--:--</strong>
+              <span id="displayDate">正在读取日期</span>
+            </div>
+            <div class="ambient-controls">
+              <span id="displayWakeStatus" class="ambient-wake-status">屏幕保持常亮准备中</span>
+              <button id="displayFullscreen" type="button">进入全屏</button>
+              <button type="button" data-view-target="home" data-display-exit>退出展示</button>
+            </div>
+          </header>
+          <main class="ambient-grid">
+            <section class="ambient-hero">
+              <p class="ambient-kicker">今日鲜度简报</p>
+              <h1 id="displayHeadline">物品状态一目了然</h1>
+              <p id="displaySummary">正在整理今天的物品状态。</p>
+              <div class="ambient-metrics">
+                <article><span>全部物品</span><strong id="displayTotalCount">0</strong><small>项</small></article>
+                <article class="expired"><span>已经过期</span><strong id="displayExpiredCount">0</strong><small>项</small></article>
+                <article class="expiring"><span>三天内</span><strong id="displayExpiringCount">0</strong><small>项</small></article>
+              </div>
+              <div class="ambient-freshness">
+                <div><span>整体有效状态</span><strong id="displayFreshnessText">--</strong></div>
+                <div class="ambient-freshness-track" aria-hidden="true"><span id="displayFreshnessBar"></span></div>
+              </div>
+            </section>
+            <section class="ambient-priority">
+              <div class="ambient-section-head">
+                <div><p>优先处理</p><h2>近期到期</h2></div>
+                <span id="displayUpdatedAt">刚刚更新</span>
+              </div>
+              <div id="displayFoods" class="ambient-food-list"></div>
+            </section>
+          </main>
+          <footer class="ambient-footer">
+            <span><i></i>家庭物品状态会自动更新</span>
+            <small>轻触右上角可全屏展示</small>
+          </footer>
+        </div>
+      </section>
+
+      <!-- ===== 库存（食材台账） ===== -->
+      <section class="view" data-view-panel="items" aria-label="食材台账">
+        <div class="page-title">
+          <div><h1>食材台账</h1><p class="sub">见夏的家 · 主冰箱 / 副冰箱共 <b class="num" id="itemsCount">0</b> 件在库食材</p></div>
+          <div class="page-title-actions">
+            <button class="primary add-food-action" type="button" data-new-food>录入食材</button>
+          </div>
+        </div>
+        <div class="food-layout food-list-layout">
+          <section class="panel collection food-collection">
+            <div class="food-list-head">
+              <div class="food-list-tools">
+                <label class="food-search">
+                  <span class="sr-only">搜索食材名称</span>
+                  <svg class="ic ic-18 food-search-icon" aria-hidden="true"><use href="#i-search"/></svg>
+                  <input id="foodSearch" type="search" maxlength="100" placeholder="搜索食材名称…">
+                </label>
+                <div class="food-status-tabs" role="tablist" aria-label="食材状态筛选">
+                  <button type="button" class="food-status-tab active" role="tab" aria-selected="true" data-food-filter="all">全部</button>
+                  <button type="button" class="food-status-tab" role="tab" aria-selected="false" data-food-filter="fresh">新鲜</button>
+                  <button type="button" class="food-status-tab" role="tab" aria-selected="false" data-food-filter="expiring">临期</button>
+                  <button type="button" class="food-status-tab" role="tab" aria-selected="false" data-food-filter="expired">过期</button>
+                  <button type="button" class="food-status-tab" role="tab" aria-selected="false" data-food-filter="handled">已处理</button>
+                </div>
+                <select id="foodLocationFilter" class="food-location-filter" aria-label="按分区筛选">
+                  <option value="">全部分区</option>
+                </select>
+                <span id="foodListSummary" class="food-list-summary muted">共 0 条记录</span>
+                <button id="foodManageToggle" class="food-manage-toggle" type="button" aria-pressed="false">管理</button>
+              </div>
+            </div>
+            <div id="foods" class="food-groups" aria-live="polite"></div>
+            <div id="foodBatchBar" class="food-batch-bar hidden" aria-live="polite">
+              <strong id="foodBatchCount">已选 0 项</strong>
+              <div>
+                <button id="foodBatchDate" class="primary" type="button" disabled>修改日期</button>
+                <button id="foodBatchDelete" class="food-batch-delete" type="button" disabled>删除</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ===== 消费台账 ===== -->
+      <section class="view" data-view-panel="ledger" aria-label="消费台账">
+        <header class="page-title">
+          <div>
+            <h1>消费台账</h1>
+            <p class="sub">按月统计采购金额与浪费金额，帮你看清钱花在哪、又浪费在哪。</p>
+          </div>
+          <div class="page-title-actions">
+            <span class="ledger-legend"><i style="background:var(--fresh)"></i>采购金额</span>
+            <span class="ledger-legend"><i style="background:var(--red)"></i>浪费金额</span>
+          </div>
+        </header>
+        <div class="grid12" style="margin-bottom:24px" id="ledgerSummary" aria-live="polite"></div>
+        <section class="card ledger-chart-card" style="margin-bottom:24px" aria-label="近 6 个月消费趋势">
+          <header class="ledger-chart-head">
+            <div>
+              <h3 class="ledger-chart-title">近 6 个月消费趋势</h3>
+              <p class="muted small" style="margin:4px 0 0">采购 vs 浪费 · 单位：元</p>
+            </div>
+            <div class="ledger-chart-legend">
+              <span><i style="background:var(--fresh)"></i>采购</span>
+              <span><i style="background:var(--red)"></i>浪费</span>
+            </div>
+          </header>
+          <div class="chart ledger-chart" id="ledgerChart" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <!-- ===== 预警 ===== -->
+      <section class="view" data-view-panel="alerts" aria-label="临期预警">
+        <div class="page-title">
+          <div><h1>临期预警</h1><p class="sub">按剩余时间分三级：72 小时内 · 24 小时内 · 已过期。处理后写入台账流水并同步冰箱贴。</p></div>
+          <span id="alertCount" class="pill"></span>
+        </div>
+        <div class="grid12" style="margin-bottom:24px">
+          <div class="card kpi card-hover" style="grid-column:span 4">
+            <div class="kpi-ico" style="background:#FBE9EA;color:#DC3F45"><svg class="ic ic-20"><use href="#i-alert"/></svg></div>
+            <div><div class="kpi-n num" id="kpiExpired" style="color:#DC3F45">0</div><div class="kpi-l">已过期</div></div>
+          </div>
+          <div class="card kpi card-hover" style="grid-column:span 4">
+            <div class="kpi-ico" style="background:#FCEFD9;color:#E08A00"><svg class="ic ic-20"><use href="#i-clock"/></svg></div>
+            <div><div class="kpi-n num" id="kpiExpiring" style="color:#E08A00">0</div><div class="kpi-l">24 小时内到期</div></div>
+          </div>
+          <div class="card kpi card-hover" style="grid-column:span 4">
+            <div class="kpi-ico" style="background:#E6F6EE;color:#0E9F6E"><svg class="ic ic-20"><use href="#i-leaf"/></svg></div>
+            <div><div class="kpi-n num" id="kpiSoon" style="color:#0E9F6E">0</div><div class="kpi-l">72 小时内到期</div></div>
+          </div>
+        </div>
+        <div class="alert-toolbar">
+          <div class="seg">
+            <button class="alert-tab seg-item active" type="button" data-alert-tab="pending">待处理</button>
+            <button class="alert-tab seg-item" type="button" data-alert-tab="done">已处理</button>
+          </div>
+        </div>
+        <div id="alertEmpty" class="alert-empty hidden">
+          <span class="copilot-av"><svg viewBox="0 0 120 120" width="30" height="30"><use href="#foodie"/></svg></span>
+          <div><b>暂无待处理预警</b><span>冰箱里的食材都在安全期内，继续保持～</span></div>
+        </div>
+        <div id="alertGroups" class="alert-groups"></div>
+      </section>
+
+      <!-- ===== 账户管理 ===== -->
+      <section class="view" data-view-panel="account" aria-label="账户管理">
+        <div class="page-title">
+          <div><h1>账户管理</h1><p class="sub">当前账号、账户信息与家庭管理。</p></div>
+        </div>
+        <div class="settings-layout">
+          <section class="panel settings-card account-settings-card">
+            <nav class="account-section-nav" aria-label="账户管理子导航">
+              <button type="button" data-scroll-to="#accountCurrentTitle">当前账号</button>
+              <button type="button" data-scroll-to="#accountInfoTitle">账户信息</button>
+              <button type="button" data-scroll-to="#householdName">家庭管理</button>
+            </nav>
+            <div class="settings-subsection">
+              <h3 class="settings-subtitle" id="accountCurrentTitle">当前账号</h3>
+              <div id="accountPanel" class="account-summary"></div>
+            </div>
+
+            <div class="settings-subsection">
+              <h3 class="settings-subtitle" id="accountInfoTitle">账户信息</h3>
+              <p class="muted small" style="margin:-4px 0 14px">修改昵称、邮箱或密码，保存后立即生效。</p>
+              <form id="accountManageForm" class="form account-manage-form" autocomplete="off">
+                <label class="field-group"><span class="field-label">显示名</span><input name="displayName" id="accountDisplayName" maxlength="40" placeholder="新的显示名"></label>
+                <label class="field-group"><span class="field-label">邮箱</span><input name="email" id="accountEmail" type="email" placeholder="新的邮箱"></label>
+                <label class="field-group"><span class="field-label">新密码（留空则不修改）</span><input name="password" id="accountPassword" type="password" minlength="6" autocomplete="new-password" placeholder="至少 6 位"></label>
+                <label class="field-group"><span class="field-label">确认新密码</span><input name="passwordConfirm" id="accountPasswordConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="再输入一次新密码"></label>
+                <div class="account-manage-actions">
+                  <button class="quiet" type="reset">重置</button>
+                  <button class="primary" type="submit">保存账户</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="settings-subsection household-settings-subsection">
+              <div class="section-head"><h3 class="settings-subtitle" id="householdName">我的家庭</h3><span id="householdRole" class="role-pill">家庭创建者</span></div>
+              <p id="householdHint" class="muted" style="margin:-6px 0 14px">家庭成员共同管理同一份物品和台账内容。</p>
+              <div id="householdMembers" class="household-members"></div>
+              <div class="household-actions">
+                <button id="createHouseholdInvite" class="primary" type="button">邀请家庭成员</button>
+                <button id="leaveHousehold" class="danger-button" type="button">退出家庭</button>
+              </div>
+              <div id="householdInvitePanel" class="household-invite hidden">
+                <span>邀请码</span>
+                <strong id="householdInviteCode">----</strong>
+                <small id="householdInviteExpires">有效期至 --，使用一次后失效</small>
+                <div class="household-invite-actions">
+                  <button id="copyHouseholdInviteCode" class="quiet" type="button">复制邀请码</button>
+                  <button id="copyHouseholdInvite" class="primary" type="button">复制注册链接</button>
+                </div>
+                <p class="invite-help">把邀请码或链接发给家人，对方在注册页填写即可加入本家庭。</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ===== Agent 设置 ===== -->
+      <section class="view" data-view-panel="agent-settings" aria-label="Agent 设置">
+        <div class="page-title">
+          <div><h1>Agent 设置</h1><p class="sub">配置你的个人 AI 助手参数。</p></div>
+        </div>
+        <div class="settings-layout">
+          <section class="panel settings-card agent-settings-card" id="agentSettingsAnchor">
+            <div class="section-head"><h2>我的 Agent</h2><span id="aiSettingsState" class="muted">使用系统配置</span></div>
+            <p id="aiSettingsHint" class="muted small" style="margin-top:-4px;margin-bottom:14px">当前优先使用你的个人配置，不消耗系统输入额度；API Key 不会再次回显。</p>
+            <form id="aiSettingsForm" class="form ai-settings-form" autocomplete="off">
+              <div class="ai-preset-tip" id="aiPresetTip">
+                <div class="ai-preset-tip-head">
+                  <strong>第一次配置？可以使用 DeepSeek</strong>
+                  <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener" class="ai-preset-link">创建 DeepSeek API Key ↗</a>
+                </div>
+                <p class="muted small ai-preset-desc">前往开放平台创建 API Key，再把 Key 粘贴到下方。</p>
+                <div class="ai-preset-meta">
+                  <span><b>模型：</b>deepseek-v4-flash</span>
+                  <span><b>Base URL：</b>https://api.deepseek.com</span>
+                  <button id="useDeepSeekPreset" class="quiet ai-preset-btn" type="button">填入 DeepSeek 参数</button>
+                </div>
+              </div>
+              <label class="field-group"><span class="field-label">API Key</span><input name="openaiApiKey" type="password" autocomplete="new-password" placeholder="****3e7d（留空保留）"></label>
+              <label class="field-group"><span class="field-label">模型</span><input name="openaiModel" id="aiSettingsModel" maxlength="120" placeholder="deepseek-v4-flash"></label>
+              <label class="field-group ai-base-url"><span class="field-label">Base URL</span><input name="openaiBaseUrl" id="aiSettingsBaseUrl" type="url" placeholder="https://api.deepseek.com"></label>
+              <div class="ai-settings-actions">
+                <button id="clearAiSettings" class="quiet" type="button">改用系统配置</button>
+                <button class="primary" type="submit">保存个人配置</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <!-- ===== 偏好设置 ===== -->
+      <section class="view" data-view-panel="preferences" aria-label="偏好设置">
+        <div class="page-title">
+          <div><h1>偏好设置</h1><p class="sub">提醒与同步偏好。</p></div>
+        </div>
+        <div class="settings-layout">
+          <section class="panel settings-card pref-settings-card">
+            <div class="section-head"><h2>提醒与同步</h2></div>
+            <div class="ft-set-row ft-number-row">
+              <div class="grow">
+                <b>临期预警阈值</b>
+                <div class="small muted-2">距离过期多久开始提醒（天）</div>
+              </div>
+              <input id="prefWarnDays" type="number" min="1" max="30" value="3" class="ft-set-input">
+            </div>
+            <label class="ft-set-row ft-toggle-row" for="prefNotifyExpire">
+              <div class="grow">
+                <b>临期到期通知</b>
+                <div class="small muted-2">物品临期时推送提醒</div>
+              </div>
+              <input id="prefNotifyExpire" type="checkbox" class="ft-switch" checked>
+            </label>
+            <label class="ft-set-row ft-toggle-row" for="prefDaily">
+              <div class="grow">
+                <b>每日晨间摘要</b>
+                <div class="small muted-2">每天 08:00 推送当日临期清单</div>
+              </div>
+              <input id="prefDaily" type="checkbox" class="ft-switch" checked>
+            </label>
+            <button id="prefSave" class="primary" type="button" style="margin-top:14px">保存偏好</button>
+          </section>
+        </div>
+      </section>
+
+      <!-- ===== 物品助手（agent 视图） ===== -->
+      <section class="view" data-view-panel="agent" aria-label="物品助手">
+        <div class="page-title">
+          <div><h1>物品助手</h1><p class="sub">由小食 AI 驱动，记录食材、查询临期、生成菜谱。</p></div>
+          <button id="newConversation" class="primary" type="button">新对话</button>
+        </div>
+        <div class="agent-layout">
+          <aside id="conversationPanel" class="panel conversation-panel">
+            <div class="section-head conversation-head">
+              <h2>对话</h2>
+              <button id="conversationToggle" class="conversation-toggle" type="button" aria-expanded="false" aria-controls="conversations">
+                <span><small>当前对话</small><strong id="activeConversationTitle">新对话</strong></span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9 5 5 5-5"/></svg>
+              </button>
+              <span id="agentStatus" class="muted"></span>
+            </div>
+            <div id="conversations" class="conversation-list"></div>
+          </aside>
+          <section class="panel chat-panel">
+            <div id="agentMessages" class="agent-messages" aria-live="polite">
+              <div class="agent-empty"><strong>直接说出你想做的事</strong><span>例如："帮我添加一盒牛奶，7 月 20 日到期。"</span></div>
+            </div>
+            <form id="agentForm" class="agent-compose" data-input-mode="text">
+              <div class="agent-input-surface" data-voice-text-surface>
+                <textarea name="content" maxlength="4000" rows="1" placeholder="发消息或按住说话…" required></textarea>
+              </div>
+              <button class="agent-voice-pad" type="button" data-voice-input aria-label="按住说话，松开发送" aria-pressed="false" hidden disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Zm6-3a6 6 0 0 1-12 0m6 6v4m-4 0h8"/></svg>
+                <span>按住说话</span>
+              </button>
+              <span class="agent-voice-status" data-voice-status role="status"></span>
+              <button class="agent-send" type="submit" aria-label="发送消息">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m0 0-6 6m6-6 6 6"/></svg>
+              </button>
+              <button class="agent-mode-toggle" type="button" data-input-mode-toggle aria-label="切换到文本输入">
+                <svg class="mode-icon-voice" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4m4-7v10m4-13v16m4-12v8m4-5v2"/></svg>
+                <svg class="mode-icon-text" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></svg>
+              </button>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <!-- 台账明细 -->
+      <section class="view" data-view-panel="ledger-list" aria-label="台账明细">
+        <div class="view-head"><div><h2>台账明细</h2><p class="sub">采购 / 浪费 / 累计节省 流水</p></div><button class="btn btn-ghost" type="button" data-panel="ledger"><svg class="ic ic-18"><use href="#i-chev"/></svg>返回台账</button></div>
+        <div class="ledger-list-tabs" id="ledgerListTabs" role="tablist">
+          <button class="ledger-list-tab active" type="button" data-ledger-tab="purchase">采购</button>
+          <button class="ledger-list-tab" type="button" data-ledger-tab="waste">浪费</button>
+          <button class="ledger-list-tab" type="button" data-ledger-tab="savings">节省</button>
+        </div>
+        <div class="card" style="overflow:hidden">
+          <div id="ledgerList" class="ledger-list" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 菜谱管理 -->
+      <section class="view" data-view-panel="recipes" aria-label="菜谱管理">
+        <header class="page-title">
+          <div>
+            <h1>菜谱管理</h1>
+            <p class="sub">本周菜单、今日菜谱与 AI 推荐，优先清掉冰箱里快到期的食材。</p>
+          </div>
+          <div class="page-title-actions">
+            <button id="recipeGenerate" class="ai-generate-btn" type="button">
+              <svg class="ic ic-18" aria-hidden="true"><use href="#i-spark"/></svg>
+              AI 生成今日菜谱
+            </button>
+          </div>
+        </header>
+
+        <section class="recipe-advice" id="recipeAdvice">
+          <header class="recipe-advice-head">
+            <span class="recipe-advice-avatar" aria-hidden="true">
+              <svg viewBox="0 0 120 120" width="36" height="36"><use href="#foodie"/></svg>
+            </span>
+            <div class="recipe-advice-meta">
+              <strong>小食</strong>
+              <span class="recipe-advice-tag" id="recipeAdviceTag">基于 0 件临期食材</span>
+            </div>
+          </header>
+          <p class="recipe-advice-body" id="recipeAdviceBody">
+            冰箱里目前没有快到期的食材。点击右上角「AI 生成今日菜谱」让小食帮你设计一份新菜单。
+          </p>
+        </section>
+
+        <div class="sec-title"><h3>今日菜谱</h3></div>
+        <div class="grid12" id="todayMenuGrid" aria-live="polite"></div>
+        <div class="sec-title" style="margin-top:20px"><h3>本周菜单</h3></div>
+        <div class="grid12" id="weeklyMenuGrid" aria-live="polite"></div>
+        <div class="sec-title" style="margin-top:20px"><h3>推荐菜谱</h3></div>
+        <div class="grid12" id="recipeGrid" aria-live="polite"></div>
+      </section>
+
+      <!-- 菜谱详情 -->
+      <section class="view" data-view-panel="recipes-detail" aria-label="菜谱详情">
+        <header class="page-title">
+          <div>
+            <p class="eyebrow">菜谱详情</p>
+            <h1 id="recipeDetailTitle">番茄土豆牛腩煲</h1>
+            <p class="sub" id="recipeDetailMeta">· 约 55 分钟 · 4 人份</p>
+            <div class="recipe-meta-row" id="recipeDetailMetaRow">
+              <span class="recipe-tag" id="recipeDetailTag">用掉 3 样临期</span>
+              <span class="recipe-meta-pill" id="recipeDetailNutrition">高蛋白</span>
+              <span class="recipe-meta-pill" id="recipeDifficulty">容易</span>
+            </div>
+          </div>
+          <div class="page-title-actions">
+            <button class="btn btn-ghost" type="button" data-panel="recipes">
+              <svg class="ic ic-18"><use href="#i-chev"/></svg>返回菜谱
+            </button>
+          </div>
+        </header>
+        <div class="recipe-detail-grid">
+          <section class="recipe-hero-section">
+            <div class="recipe-hero" id="recipeDetailHero" style="background:linear-gradient(150deg,#E8825F,#C74E33)">
+              <span class="recipe-hero-tag" id="recipeDetailHeroTag">用掉 3 样临期</span>
+              <svg class="ic ic-64" aria-hidden="true"><use href="#i-book"/></svg>
+              <p class="recipe-hero-name" id="recipeDetailHeroName">番茄土豆牛腩煲</p>
+            </div>
+            <h3 class="section-title">做法</h3>
+            <ol class="recipe-steps" id="recipeDetailSteps">
+              <li class="recipe-step-item">牛腩冷水下锅焯水，撇去浮沫后捞出。</li>
+              <li class="recipe-step-item">番茄去皮切块，土豆切滚刀块。</li>
+              <li class="recipe-step-item">热锅炒香番茄出沙，加牛腩与清水炖 40 分钟。</li>
+              <li class="recipe-step-item">下土豆再炖 15 分钟，加盐调味即可。</li>
+            </ol>
+          </section>
+          <aside class="recipe-aside">
+            <section class="recipe-ingredient-card">
+              <h3 class="section-title">食材清单</h3>
+              <ul class="recipe-ingredient-list" id="recipeDetailChips">
+                <li class="recipe-ingredient-item"><span>牛腩</span><strong>600g</strong></li>
+                <li class="recipe-ingredient-item"><span>番茄</span><strong>2 个</strong></li>
+                <li class="recipe-ingredient-item"><span>土豆</span><strong>2 个</strong></li>
+              </ul>
+            </section>
+            <section class="recipe-expiring-card">
+              <h3 class="section-title">用掉的临期食材</h3>
+              <div class="alert-row" id="recipeDetailExpiring"></div>
+            </section>
+            <button class="btn btn-primary recipe-add-btn" type="button" data-view-target="items" data-new-food>
+              <svg class="ic ic-18"><use href="#i-plus"/></svg>把缺少的食材加入库存
+            </button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 消息通知（铃铛跳转） -->
+      <section class="view" data-view-panel="notifications" aria-label="消息通知">
+        <div class="page-title notif-page-title">
+          <div>
+            <h1>消息通知</h1>
+            <p class="sub">预警、家人动态与系统消息</p>
+          </div>
+          <button class="link" id="markAllReadBtn" type="button">全部标记为已读</button>
+        </div>
+        <div id="notificationList" class="noti-list" aria-live="polite"></div>
+      </section>
+    </section>
+
+    <!-- ============ 小食 AI 助手浮窗（完整版：avatar+快捷入口+文字+语音） ============ -->
+    <form id="quickAgentForm" class="quick-agent hidden" aria-label="小食 AI 助手">
+      <section id="quickAgentDialog" class="quick-agent-dialog hidden" role="dialog" aria-modal="false" aria-labelledby="quickAgentTitle">
+        <header class="quick-agent-header">
+          <div class="quick-agent-id">
+            <span class="quick-agent-av"><svg viewBox="0 0 120 120" width="40" height="40" aria-hidden="true"><use href="#foodie"/></svg></span>
+            <div><b id="quickAgentTitle">小食 AI 助手</b><span class="muted small">DeepSeek 驱动 · 随时问食材</span></div>
+          </div>
+          <div class="quick-agent-header-actions">
+            <button id="quickAgentOpenFull" class="qa-expand-btn" type="button" aria-label="在独立页面打开小食助手">展开</button>
+            <button id="quickAgentClose" class="icon-button quick-agent-close" type="button" aria-label="关闭小食助手">
+              <svg class="ic ic-18"><use href="#i-close"/></svg>
+            </button>
+          </div>
+        </header>
+        <div id="quickAgentMessages" class="quick-agent-messages" aria-live="polite">
+          <div class="agent-bubble ai">晚上好，我是小食。需要我帮你看看冰箱里还剩什么，或者推荐一道能清临期的菜吗？</div>
+        </div>
+        <div class="quick-agent-shortcuts" aria-label="快捷入口">
+          <button type="button" data-quick-shortcut="拍照识食材"><span class="qa-ico"><svg class="ic"><use href="#i-camera"/></svg></span><span>拍照识食材</span></button>
+          <button type="button" data-quick-shortcut="今日菜谱"><span class="qa-ico"><svg class="ic"><use href="#i-book"/></svg></span><span>今日菜谱</span></button>
+          <button type="button" data-quick-shortcut="临期预警"><span class="qa-ico"><svg class="ic"><use href="#i-alert"/></svg></span><span>临期预警</span></button>
+          <button type="button" data-quick-shortcut="AI 膳养"><span class="qa-ico"><svg class="ic"><use href="#i-spark"/></svg></span><span>AI 膳养</span></button>
+        </div>
+        <span id="quickAgentAvailability" class="quick-agent-availability muted"></span>
+        <div class="agent-compose quick-agent-compose" data-agent-compose data-input-mode="text">
+          <div class="agent-input-surface" data-voice-text-surface>
+            <textarea name="content" maxlength="4000" rows="1" placeholder="对小食说点什么…" required></textarea>
+          </div>
+          <button class="agent-voice-btn" type="button" data-voice-input aria-label="按住说话，松开发送；轻点切换语音模式" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Zm6-3a6 6 0 0 1-12 0m6 6v4m-4 0h8"/></svg>
+          </button>
+          <span class="agent-voice-status" data-voice-status role="status"></span>
+          <button class="agent-mode-toggle" type="button" data-input-mode-toggle aria-label="切换到语音模式" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Zm6-3a6 6 0 0 1-12 0m6 6v4m-4 0h8"/></svg>
+          </button>
+          <button class="agent-voice-pad" type="button" data-voice-input aria-label="按住说话，松开发送" aria-pressed="false" hidden disabled>
+            <svg class="mode-icon-voice" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Zm6-3a6 6 0 0 1-12 0m6 6v4m-4 0h8"/></svg>
+            <span class="voice-pad-label">按住说话</span>
+          </button>
+          <button class="agent-keyboard-toggle" type="button" data-input-mode-toggle aria-label="切换到键盘输入" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></svg>
+          </button>
+          <button class="agent-send" type="submit" aria-label="发送消息">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+      </section>
+      <button id="quickAgentVoice" class="quick-agent-voice hidden" type="button" data-voice-input data-text-fallback aria-label="打开小食助手" aria-pressed="false" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Zm6-3a6 6 0 0 1-12 0m6 6v4m-4 0h8"/></svg>
+        <span class="sr-only">打开小食助手</span>
+      </button>
+      <button id="quickAgentFab" class="quick-agent-fab" type="button" aria-label="打开小食 AI 助手">
+        <span class="quick-agent-fab-pulse" aria-hidden="true"></span>
+        <span class="quick-agent-fab-icon" aria-hidden="true">
+          <svg viewBox="0 0 120 120" width="34" height="34"><use href="#foodie"/></svg>
+        </span>
+      </button>
+    </form>
+
+    <!-- ============ 录音浮层 / 物品编辑弹窗 ============ -->
+    <div id="voiceRecordingOverlay" class="voice-recording-overlay hidden" aria-hidden="true">
+      <div class="voice-recording-panel">
+        <div class="voice-recording-state"><span></span><strong id="voiceRecordingTitle">正在收音…</strong></div>
+        <p id="voiceRecordingHint">松手发送，上移取消</p>
+        <div id="voiceRecordingWave" class="voice-recording-wave" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div id="foodCalendar" class="food-calendar-overlay hidden" aria-hidden="true">
+      <div class="calendar-panel" role="dialog" aria-modal="true" aria-label="选择日期">
+        <div class="calendar-head">
+          <button id="calendarPrevious" type="button" class="quiet" aria-label="上一月">‹</button>
+          <strong id="calendarMonth"></strong>
+          <button id="calendarNext" type="button" class="quiet" aria-label="下一月">›</button>
+        </div>
+        <div class="calendar-weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </div>
+    </div>
+    <div id="foodEditorOverlay" class="food-editor-overlay hidden" aria-hidden="true">
+      <section class="food-editor" role="dialog" aria-modal="true" aria-labelledby="foodEditorTitle" aria-describedby="foodEditorHint">
+        <header class="food-editor-header">
+          <div>
+            <p class="eyebrow">家庭记录</p>
+            <h2 id="foodEditorTitle">添加物品</h2>
+            <p id="foodEditorHint">填写物品名称、分类和到期信息即可。</p>
+          </div>
+          <button id="foodEditorClose" class="icon-button" type="button" aria-label="关闭物品编辑器">×</button>
+        </header>
+        <form id="foodForm" class="food-editor-form" novalidate>
+          <div class="food-editor-body">
+            <input type="hidden" name="id">
+            <p class="required-hint"><span aria-hidden="true">*</span> 为必填项</p>
+
+            <div class="food-basic-grid">
+              <label class="field-group" for="foodName">
+                <span class="field-label">物品名称 <span class="required-mark" aria-hidden="true">*</span></span>
+                <input id="foodName" name="name" maxlength="40" autocomplete="off" placeholder="例如：牛奶或感冒药" required>
+                <span class="field-error" data-error-for="name"></span>
+              </label>
+
+              <div class="field-group">
+                <span class="field-label">分类 <span class="required-mark" aria-hidden="true">*</span></span>
+                <input id="foodCategory" name="category" type="hidden">
+                <button id="categoryTrigger" class="select-control" type="button" aria-expanded="false" aria-controls="categoryPicker">
+                  <span id="selectedCategoryIcon" class="select-control-icon" aria-hidden="true">＋</span>
+                  <span id="selectedCategoryText">请选择分类</span>
+                  <span class="select-chevron" aria-hidden="true">⌄</span>
+                </button>
+                <div id="categoryPicker" class="category-picker hidden" role="listbox" aria-label="物品分类"></div>
+                <span class="field-error" data-error-for="category"></span>
+              </div>
+
+              <label class="field-group" for="foodQuantity">
+                <span class="field-label">数量 <span class="required-mark" aria-hidden="true">*</span></span>
+                <input id="foodQuantity" name="quantityText" maxlength="30" autocomplete="off" placeholder="例如：1 盒 / 200 g / 半打">
+                <span class="field-error" data-error-for="quantityText"></span>
+              </label>
+
+              <label class="field-group" for="foodLocation">
+                <span class="field-label">存放地点 <span class="required-mark" aria-hidden="true">*</span></span>
+                <input id="foodLocation" name="location" maxlength="40" autocomplete="off" list="locationChoices" placeholder="例如：冷藏室 / 冷冻室 / 储物柜">
+                <datalist id="locationChoices"></datalist>
+                <span class="field-error" data-error-for="location"></span>
+              </label>
+
+              <label class="field-group" for="foodUnitPrice">
+                <span class="field-label">价格（总价）</span>
+                <input id="foodUnitPrice" name="unitPrice" type="number" min="0" max="99999" step="0.01" inputmode="decimal" placeholder="例如：9.9">
+              </label>
+
+              <label class="field-group" for="foodNote">
+                <span class="field-label">备注</span>
+                <textarea id="foodNote" name="note" maxlength="200" placeholder="可记录购买渠道、品牌或特别提示"></textarea>
+              </label>
+            </div>
+
+            <fieldset class="expiry-mode">
+              <legend>到期时间</legend>
+              <div class="expiry-mode-switch" role="radiogroup" aria-label="到期时间">
+                <button type="button" class="expiry-mode-btn active" data-expiry-mode="direct" role="radio" aria-checked="true">指定到期日</button>
+                <button type="button" class="expiry-mode-btn" data-expiry-mode="calculated" role="radio" aria-checked="false">按起始日 + 保质期</button>
+              </div>
+            </fieldset>
+
+            <div class="expiry-panel" data-expiry-panel="direct">
+              <label class="field-group" for="foodExpiresOn">
+                <span class="field-label">到期日期 <span class="required-mark" aria-hidden="true">*</span></span>
+                <button type="button" class="date-control" data-date-target="expiresOn" aria-haspopup="dialog">
+                  <span id="foodExpiresOnLabel">选择到期日期</span>
+                  <span class="select-chevron" aria-hidden="true">⌄</span>
+                </button>
+                <input id="foodExpiresOn" name="expiresOn" type="hidden">
+                <div class="field-expiry-helper" id="foodExpiryHelper">填写起始日期和有效天数后显示预计到期日</div>
+              </label>
+            </div>
+
+            <div class="expiry-panel hidden" data-expiry-panel="calculated">
+              <div class="offset-grid">
+                <label class="field-group" for="foodStartDate">
+                  <span class="field-label">起始日期 <span class="required-mark" aria-hidden="true">*</span></span>
+                  <button type="button" class="date-control" data-date-target="startDate" aria-haspopup="dialog">
+                    <span id="foodStartDateLabel">选择起始日期</span>
+                    <span class="select-chevron" aria-hidden="true">⌄</span>
+                  </button>
+                  <input id="foodStartDate" name="startDate" type="hidden">
+                  <span class="field-error" data-error-for="startDate"></span>
+                </label>
+                <label class="field-group" for="foodShelfLifeDays">
+                  <span class="field-label">保质期（天） <span class="required-mark" aria-hidden="true">*</span></span>
+                  <input id="foodShelfLifeDays" name="shelfLifeDays" type="number" min="0" max="36500" step="1" placeholder="例如：7">
+                  <span class="field-error" data-error-for="shelfLifeDays"></span>
+                </label>
+              </div>
+              <p id="calculatedExpiry" class="field-expiry-result"></p>
+            </div>
+          </div>
+          <footer class="food-editor-footer">
+            <button id="foodEditorCancel" type="button" class="quiet">取消</button>
+            <button id="foodEditorSave" class="primary" type="submit">添加物品</button>
+          </footer>
+        </form>
+      </section>
+    </div>
+
+    <!-- ============ 批量修改到期日 ============ -->
+    <div id="batchFoodDateOverlay" class="dialog-overlay hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="batchFoodDateTitle">
+      <div class="dialog-card">
+        <p class="dialog-eyebrow">批量修改</p>
+        <h2 id="batchFoodDateTitle">修改到期日</h2>
+        <p class="dialog-body">为选中的食材统一设置新的到期日期。</p>
+        <label class="field-group">
+          <span class="field-label">新到期日期</span>
+          <input id="batchFoodDateInput" type="date" class="date-input">
+        </label>
+        <div class="dialog-actions">
+          <button id="batchFoodDateCancel" class="dialog-cancel" type="button">取消</button>
+          <button id="batchFoodDateSave" class="dialog-confirm primary" type="button">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="dialogOverlay" class="dialog-overlay hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+      <div class="dialog-card">
+        <p id="dialogEyebrow" class="dialog-eyebrow"></p>
+        <h2 id="dialogTitle"></h2>
+        <p id="dialogBody" class="dialog-body"></p>
+        <div class="dialog-actions">
+          <button id="dialogCancel" class="dialog-cancel" type="button"></button>
+          <button id="dialogConfirm" class="dialog-confirm" type="button"></button>
+        </div>
+      </div>
+    </div>
+
+    <p id="message" class="message" role="status"></p>
+  </main>
+
+  <!-- ============ 底部内联脚本 ============ -->
+  <script src="/vendor/markdown-it.js?v=20260815-3"></script>
+  <script src="/markdown.js?v=20260815-3"></script>
+  <script src="/app.js?v=20260815-3"></script>
+  <script>
+    // 内联 UI 助手：仅保留页面间跳转与登录/退出等最小化逻辑
+    (function () {
+      const $ = (sel, root) => (root || document).querySelector(sel);
+      const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+      // 登录/注册切换
+      const loginForm = $("#loginForm");
+      const registerForm = $("#registerForm");
+      const authTitle = $("#authTitle");
+      const authHint = $("#authHint");
+      const setAuthMode = (mode) => {
+        const register = mode === "register";
+        if (loginForm) loginForm.classList.toggle("hidden", register);
+        if (registerForm) registerForm.classList.toggle("hidden", !register);
+        if (authTitle) authTitle.textContent = register ? "注册食光" : "欢迎回来";
+        if (authHint) authHint.textContent = register ? "用邮箱创建一个本地家庭账号" : "登录家庭账户，继续管理家庭的食材台账。";
+      };
+      $("#registerLink")?.addEventListener("click", (e) => { e.preventDefault(); setAuthMode("register"); });
+      $("#backToLogin")?.addEventListener("click", (e) => { e.preventDefault(); setAuthMode("login"); });
+
+      // 个人中心下拉（桌面端 + 移动端共用同一个菜单）
+      const userChip = $("#userChip");
+      const mobileUserChip = $("#mobileUserChip");
+      const userMenu = $("#userMenu");
+      const menuTriggers = [userChip, mobileUserChip].filter(Boolean);
+      if (menuTriggers.length && userMenu) {
+        const closeMenu = () => {
+          userMenu.classList.add("hidden");
+          menuTriggers.forEach((t) => t.setAttribute("aria-expanded", "false"));
+        };
+        const openFor = (trigger) => {
+          userMenu.classList.remove("hidden");
+          menuTriggers.forEach((t) => t.setAttribute("aria-expanded", t === trigger ? "true" : "false"));
+        };
+        const toggleFor = (trigger) => {
+          const open = userMenu.classList.contains("hidden");
+          if (open) openFor(trigger); else closeMenu();
+        };
+        menuTriggers.forEach((trigger) => trigger.addEventListener("click", () => toggleFor(trigger)));
+        userMenu.addEventListener("click", (event) => {
+          if (event.target.closest("[data-view-target]") || event.target.closest("#logoutMenu")) closeMenu();
+        });
+        document.addEventListener("click", (e) => {
+          if (userMenu.classList.contains("hidden")) return;
+          const insideTrigger = menuTriggers.some((t) => t.contains(e.target));
+          if (!userMenu.contains(e.target) && !insideTrigger) closeMenu();
+        });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+      }
+
+      // data-view-panel 切换：统一走 setView，确保渲染 + 导航高亮 + hash 同步，避免只切 .active 导致的空白面板
+      const workspace = $("#workspace");
+      const showPanel = (name) => {
+        if (typeof setView === "function") { setView(name); return; }
+        if (!workspace || workspace.classList.contains("hidden")) return;
+        const panel = $(`[data-view-panel="${name}"]`);
+        if (!panel) return;
+        $$("[data-view-panel]").forEach((p) => p.classList.remove("active"));
+        panel.classList.add("active");
+        $$("#mainNav [data-view-target]").forEach((b) => b.classList.toggle("active", false));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+      window.showPanel = showPanel;
+
+      const logoutMenu = $("#logoutMenu");
+      const logoutBtn = $("#logout");
+      if (logoutMenu && logoutBtn) logoutMenu.addEventListener("click", () => logoutBtn.click());
+
+      $$("[data-panel]").forEach((el) => {
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          showPanel(el.getAttribute("data-panel"));
+        });
+      });
+
+      // 预警页：待处理 / 已处理 切换
+      $$("[data-alert-tab]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          $$("[data-alert-tab]").forEach((t) => t.classList.toggle("on", t === tab));
+        });
+      });
+
+      // 小食助手浮标：打开/关闭对话框
+      const fab = $("#quickAgentFab");
+      const dialog = $("#quickAgentDialog");
+      const voiceBtn = $("#quickAgentVoice");
+      const closeBtn = $("#quickAgentClose");
+      const fabOpen = () => {
+        if (!dialog) return;
+        dialog.classList.remove("hidden");
+        fab?.classList.add("hidden");
+        voiceBtn?.classList.add("hidden");
+        const ta = dialog.querySelector("textarea[name='content']");
+        ta?.focus();
+      };
+      const fabClose = () => {
+        if (!dialog) return;
+        dialog.classList.add("hidden");
+        fab?.classList.remove("hidden");
+      };
+      fab?.addEventListener("click", fabOpen);
+      closeBtn?.addEventListener("click", fabClose);
+
+      // 打开完整助手：跳转到 agent 视图
+      const openFull = $("#quickAgentOpenFull");
+      openFull?.addEventListener("click", () => {
+        fabClose();
+        if (typeof window.setView === "function") window.setView("agent");
+      });
+
+      // 快捷入口按钮：填入文字到输入框
+      $$("[data-quick-shortcut]").forEach((b) => {
+        b.addEventListener("click", () => {
+          const txt = b.getAttribute("data-quick-shortcut");
+          const ta = dialog?.querySelector("textarea[name='content']");
+          if (ta) { ta.value = txt; ta.focus(); }
+        });
+      });
+
+      // 密码"忘记密码"占位
+      $("#forgotPassword")?.addEventListener("click", (e) => { e.preventDefault(); alert("请联系家庭管理员重置密码。"); });
+
+      // 标签页视觉切换
+      $$("[data-alert-tab]").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          $$("[data-alert-tab]").forEach((t) => t.classList.toggle("on", t === tab));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "installCommand": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install --os=linux --cpu=x64",
+  "outputDirectory": "public",
+  "cloudFunctions": {
+    "nodejs": {
+      "externalNodeModules": [
+        "sql.js",
+        "sharp",
+        "openai",
+        "markdown-it",
+        "zod",
+        "@modelcontextprotocol/sdk",
+        "@edgeone/pages-blob"
+      ],
+      "includeFiles": ["src/**", "package.json"]
+    }
+  }
+}

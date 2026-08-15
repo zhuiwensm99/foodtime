@@ -1,0 +1,50 @@
+# ---- Dependencies ----
+node_modules/
+
+# ---- Local config & secrets (NEVER commit) ----
+config.json
+.env
+.env.*
+!.env.example
+
+# ---- Local data & databases ----
+data/
+data.bak.*/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# ---- Logs & runtime files ----
+*.log
+server*.log
+server*.pid
+
+# ---- Build / deploy artifacts ----
+.edgeone/
+cloud-functions/
+dist/
+build/
+
+# ---- Screenshots, QA scratch & reports artifacts ----
+*.png
+.shots-check/
+ux-shots/
+ux-shots-mobile/
+verify-screenshots/
+
+# ---- One-off QA scripts (not part of the app) ----
+capture-views*.js
+capture-views-mobile*.js
+execute-test-cases*.js
+three-round-test.js
+screenshot-test.js
+verify-*.js
+qa-*.js
+diag.js
+
+# ---- Private deploy notes (contains real credentials / paths) ----
+部署经验总结.md
+
+# ---- OS junk ----
+.DS_Store
+Thumbs.db

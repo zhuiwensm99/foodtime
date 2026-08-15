@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#196849"/>
+  <!-- 小屋屋顶 -->
+  <path d="M14 28 32 12l18 16" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 屋墙 + 窗户分隔 -->
+  <line x1="20" y1="34" x2="44" y2="34" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <!-- 碗 + 食物 -->
+  <path d="M19 38h26c0 8-5.8 14-13 14s-13-6-13-14Z" fill="#ffffff"/>
+  <ellipse cx="32" cy="40" rx="9" ry="2.2" fill="#196849" opacity=".18"/>
+  <!-- 右上小叶子 -->
+  <path d="M46 13c4-1.2 6.5.6 7.2 4.4-3.8 1.2-6.5-.6-7.2-4.4Z" fill="#7BE0B4"/>
+  <line x1="49.5" y1="14.2" x2="44" y2="20" stroke="#7BE0B4" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- 右下橙圆点（食材） -->
+  <circle cx="51" cy="46" r="5" fill="#F26B22"/>
+</svg>
